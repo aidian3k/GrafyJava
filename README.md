@@ -11,6 +11,6 @@ Celem projektu w języku Java jest napisanie programu, który: <br/>
 -Potrafi przeczytać z plku o ustalonym formacie taki graf <br/>
 -Potrafi sprawdzić, czy dany graf jest spójny <br/>
 -Potrafi znaleźć w tym grafie najkrótsze ścieżki pomiędzy wybranymi parami węzłów, wykorzystując Algorytm Dijkstry <br/>
--Potrafi narysować graf na ekranie
--Umożliwia wybór węzłów do wyznaczania ścieżki za pomocą myszki
--Potrafi pokazać najkrótszą ścieżkę na ekranie
+-Potrafi narysować graf na ekranie <br/>
+-Umożliwia wybór węzłów do wyznaczania ścieżki za pomocą myszki <br/>
+-Potrafi pokazać najkrótszą ścieżkę na ekranie <br/>
