@@ -1,6 +1,5 @@
 package com.example.grafy;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.PriorityQueue;
 import java.util.Stack;
@@ -12,6 +11,7 @@ public class GraphUtils {
         LinkedList<Integer> queue=new LinkedList<>();
         visited[node]=true;
         queue.add(node);
+
         while(queue.size()!=0){
             node=queue.pollFirst();
             LinkedList<Edge> current=g.getConnectionList(node);
@@ -23,11 +23,13 @@ public class GraphUtils {
                 }
             }
         }
+
         for(boolean bool : visited){
             if(!bool){
                 return false;
             }
         }
+
         return true;
     }
 

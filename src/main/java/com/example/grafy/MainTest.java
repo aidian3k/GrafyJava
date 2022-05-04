@@ -1,7 +1,6 @@
 package com.example.grafy;
 
-import java.io.*;
-import java.util.LinkedList;
+import java.io.IOException;
 
 public class MainTest {
     public static void main(String ... args) throws IOException {

@@ -1,6 +1,6 @@
 package com.example.grafy;
 
-public class Edge implements EdgeInterface, Comparable<Edge>{
+public class Edge implements EdgeInterface {
     private final int nodeFrom;
     private final int nodeTo;
     private final double weight;
@@ -26,8 +26,4 @@ public class Edge implements EdgeInterface, Comparable<Edge>{
         return weight;
     }
 
-    @Override
-    public int compareTo(Edge o) {
-        return o.getWeight()>weight ? 1 : 0;
-    }
 }

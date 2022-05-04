@@ -3,6 +3,7 @@ package com.example.grafy;
 public class Node implements Comparable<Node> {
         protected int numNode;
         protected double weight;
+
         Node(){
         }
 
