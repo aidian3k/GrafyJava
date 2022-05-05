@@ -44,7 +44,6 @@ public class BasicGraphFunctions {
             colNum=Integer.parseInt(words[1]);
             for (int c = 0; c < colNum; c++) {
                 for (int r = 0; r < rowsNum; r++) {
-                    int num = c * rowsNum + r;
                     graph.add(new LinkedList<>()); //Initializing memory for the graph representation
                 }
             }
