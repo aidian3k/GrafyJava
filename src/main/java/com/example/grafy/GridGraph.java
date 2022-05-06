@@ -4,12 +4,14 @@ import java.io.IOException;
 import java.util.LinkedList;
 import java.util.Random;
 
-public class GridGraph extends BasicGraphFunctions{
+public class GridGraph extends BasicGraphFunctions {
     private static final Random rnd=new Random();
 
-    public GridGraph(int colNum, int rowsNum, double minWeight, double maxWeight){
+    public GridGraph( int rowsNum, int colNum, double minWeight, double maxWeight){
         this.colNum=colNum;
         this.rowsNum=rowsNum;
+        this.minWeight=minWeight;
+        this.maxWeight=maxWeight;
 
         for (int c = 0; c < colNum; c++) {
             for (int r = 0; r < rowsNum; r++) {

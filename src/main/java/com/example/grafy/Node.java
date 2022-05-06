@@ -18,7 +18,7 @@ public class Node implements Comparable<Node> {
         }
 
         @Override
-        public int compareTo(com.example.grafy.Node o) {
+        public int compareTo(Node o) {
             return o.weight>weight ? 1 : 0;
         }
 

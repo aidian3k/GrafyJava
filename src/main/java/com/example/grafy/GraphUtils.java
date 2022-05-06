@@ -6,6 +6,8 @@ import java.util.Stack;
 
 public class GraphUtils {
 
+
+
     public static boolean breathFirstSearch(GridGraph g, int node){
         boolean [] visited=new boolean[g.getNodesNum()];
         LinkedList<Integer> queue=new LinkedList<>();
@@ -71,18 +73,18 @@ public class GraphUtils {
             prev[i]=-1;
         }
 
-        Node v=new Node(); //Initializing new object, which will be used in loop while
-        PriorityQueue<Node> Q=new PriorityQueue<>(g.getNodesNum());
-        Q.add(new Node(nodeA,0));
+        com.example.grafy.Node v=new com.example.grafy.Node(); //Initializing new object, which will be used in loop while
+        PriorityQueue<com.example.grafy.Node> Q=new PriorityQueue<>(g.getNodesNum());
+        Q.add(new com.example.grafy.Node(nodeA,0));
         distance[nodeA]=0; //It is not necessary--all distance doubles are default set 0
 
         while(Q.size()!=0){
 
-            Node u=Q.poll();
+            com.example.grafy.Node u=Q.poll();
             LinkedList<Edge> connectionList=g.getConnectionList(u.numNode);
             for(Edge e : connectionList){
 
-                v=new Node(e.getNodeTo(),e.getWeight());
+                v=new com.example.grafy.Node(e.getNodeTo(),e.getWeight());
                 if(distance[v.numNode] > distance[u.numNode] + v.weight){
                     distance[v.numNode]=distance[u.numNode] + v.weight;
                     prev[v.numNode]=u.numNode;
