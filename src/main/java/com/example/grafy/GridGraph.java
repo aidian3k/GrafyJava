@@ -8,6 +8,12 @@ public class GridGraph extends BasicGraphFunctions {
     private static final Random rnd=new Random();
 
     public GridGraph( int rowsNum, int colNum, double minWeight, double maxWeight){
+        if(rowsNum<=0 || colNum<=0){
+            throw new IllegalArgumentException("Illegal argument given! The program cannot generate graph with negative rows or columns");
+        }
+        if(minWeight>maxWeight || minWeight<0 || maxWeight<0){
+            throw new IllegalArgumentException("WEIGHT_ERROR: The weights given by the user are illegal!");
+        }
         this.colNum=colNum;
         this.rowsNum=rowsNum;
         this.minWeight=minWeight;
@@ -106,4 +112,6 @@ public class GridGraph extends BasicGraphFunctions {
     public int getNodesNum(){
         return colNum*rowsNum;
     }
+    public double getMinWeight() { return minWeight; }
+    public double getMaxWeight() { return maxWeight; }
 }
