@@ -14,15 +14,21 @@ public class BasicGraphFunctions {
     protected double maxWeight;
 
     void addEdgeToList(int index, Edge e){
-        graph.get(index).add(e);
+
+        try {
+            graph.get(index).add(e);
+        }
+        catch(IndexOutOfBoundsException ex){
+            throw new IndexOutOfBoundsException("There is a problem with reading given graph! The size given is > than given lines with data in file");
+        }
+
     }
 
     void saveGraph (String path) throws IOException {
         PrintWriter pw=new PrintWriter(new FileWriter(path));
 
         if(graph==null){
-            pw.println("Graph value is null");
-            System.exit(1);
+            throw new IllegalArgumentException("Graph value cannot be null!");
         }
         else{
             pw.println(rowsNum+" "+colNum);
@@ -74,9 +80,6 @@ public class BasicGraphFunctions {
 
                 nodeNum++;
 
-                if(nodeNum>=graphSize){
-                    throw new IllegalArgumentException("There is a problem with reading given graph! The size given is > than given lines with data in file");
-                }
             }
 
             minWeight=minWeightIn;
@@ -84,7 +87,7 @@ public class BasicGraphFunctions {
             br.close();
         }
         catch(ArrayIndexOutOfBoundsException | NumberFormatException e){
-            throw new IOException("FILE_READ_PROBLEM: There is a problem with reading given graph, check the file with graph!:"+"\n"+e.getMessage());
+            throw new IOException("FILE_READ_PROBLEM: There is a problem with reading given graph, check the file with graph!");
         }
 
         br.close();
