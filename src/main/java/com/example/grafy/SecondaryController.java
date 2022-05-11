@@ -27,14 +27,11 @@ public class SecondaryController {
     private GridGraph graph;
 
     public void initialize() {
-//        GraphHolder holder = GraphHolder.getInstance();
-//        graph = holder.getGraph();
         GraphicsContext gc = canvas.getGraphicsContext2D();
         drawGridGraph(gc, canvas.getWidth(), canvas.getHeight());
 
         gridSizeInfoTextField.setText(graph.rowsNum + "x" + graph.colNum);
         weightRangeInfoTextField.setText(graph.minWeight + "-" + graph.maxWeight);
-        //System.out.println(GraphUtils.dijkstra(graph, 1, 19));
 
         shortestPathComboBox.getItems().add("dijkstra");
         shortestPathComboBox.getItems().add("bellman-ford");
@@ -61,7 +58,6 @@ public class SecondaryController {
         double RATIO_EDGE_NODE_WIDTH=0.15;
         int colNum = graph.getColNum();
         int rowNum = graph.getRowsNum();
-        int nodesNumbers = rowNum * colNum;
         int nodeNum=0;
         double nodeX=0;
         double nodeY=0;
@@ -69,7 +65,7 @@ public class SecondaryController {
         double nodeSize = (heightCanvas/rowNum > widthCanvas/colNum) ? widthCanvas/(colNum+RATIO_EDGE_NODE_SIZE*colNum) : heightCanvas/(rowNum+RATIO_EDGE_NODE_SIZE*colNum);
         double rightSeparator = nodeSize;
         double bottomSeparator = nodeSize;
-        double nodeSeparator = (heightCanvas/rowNum > widthCanvas/colNum) ? (widthCanvas)/colNum : (heightCanvas)/rowNum;
+        double nodeSeparator = Math.min(heightCanvas / rowNum, widthCanvas / colNum);
 
 
         // Draw nodes
@@ -96,7 +92,6 @@ public class SecondaryController {
 
         //Draw edges
         gc.setLineWidth(RATIO_EDGE_NODE_WIDTH*nodeSize);
-        nodeNum=0;
         for(int i=0; i<rowNum; i++) {
             for(int j=0; j<colNum; j++) {
                 LinkedList<Edge> nodeEdges = new LinkedList<Edge>(graph.getConnectionList(nodeNum));
@@ -105,7 +100,6 @@ public class SecondaryController {
                 for (Edge edge : nodeEdges) {
                     int rowNodeB = (int) Math.floor(edge.getNodeTo() / colNum);
                     int colNodeB = edge.getNodeTo() % colNum;
-//                    System.out.println(nodeNum+" : "+edge.getNodeTo()+"["+rowNodeB+" "+colNodeB+"]  " + rowNodeB * nodeSeparator + " " + colNodeB * nodeSeparator + " "+nodeA_X+" "+nodeA_Y );
                     gc.strokeLine( nodeA_Y+nodeSize/2,nodeA_X+nodeSize/2, colNodeB * nodeSeparator+nodeSize/2, rowNodeB * nodeSeparator+nodeSize/2);
                 }
                 nodeNum++;

@@ -63,13 +63,13 @@ public class GridGraph extends BasicGraphFunctions {
 
             else if(i%colNum==colNum-1){
                 addEdgeToList(i, new Edge(i,i-colNum,rnd.nextDouble(minWeight,maxWeight)));
-                addEdgeToList(i, new Edge(i,i+1,rnd.nextDouble(minWeight,maxWeight)));
+                addEdgeToList(i, new Edge(i,i-1,rnd.nextDouble(minWeight,maxWeight)));
                 addEdgeToList(i, new Edge(i,i+colNum,rnd.nextDouble(minWeight,maxWeight)));
             }
 
             else{
                 addEdgeToList(i, new Edge(i,i-colNum,rnd.nextDouble(minWeight,maxWeight)));
-                addEdgeToList(i, new Edge(i,i+1,rnd.nextDouble(minWeight,maxWeight)));
+                addEdgeToList(i, new Edge(i,i-1,rnd.nextDouble(minWeight,maxWeight)));
                 addEdgeToList(i, new Edge(i,i+colNum,rnd.nextDouble(minWeight,maxWeight)));
                 addEdgeToList(i, new Edge(i,i+1,rnd.nextDouble(minWeight,maxWeight)));
             }

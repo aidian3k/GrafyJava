@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox alignment="TOP_CENTER" prefHeight="900.0" prefWidth="800.0" spacing="20.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.grafy.SecondaryController">
+<VBox alignment="TOP_CENTER" prefHeight="900.0" prefWidth="800.0" spacing="20.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.grafy.SecondaryController">
     <children>
       <Pane prefHeight="101.0" prefWidth="760.0">
          <children>
@@ -27,7 +27,10 @@
               <Button fx:id="secondaryButton" layoutX="611.0" layoutY="82.0" onAction="#switchToPrimary" text="Switch to Primary View" />
          </children>
       </Pane>
-      <Canvas fx:id="canvas" height="700.0" width="750.0" />
+      <Canvas fx:id="canvas" height="650.0" width="750.0">
+         <VBox.margin>
+            <Insets />
+         </VBox.margin></Canvas>
     </children>
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
