@@ -25,9 +25,17 @@
             <Button layoutX="338.0" layoutY="51.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="100.0" text="Save" />
             <Button layoutX="444.0" layoutY="51.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="100.0" text="Delete" />
               <Button fx:id="secondaryButton" layoutX="611.0" layoutY="82.0" onAction="#switchToPrimary" text="Switch to Primary View" />
+            <TextField fx:id="nodeFrom" disable="true" layoutX="88.0" layoutY="89.0" prefHeight="25.0" prefWidth="35.0" />
+            <Label alignment="CENTER_RIGHT" layoutX="45.0" layoutY="89.0" prefHeight="25.0" prefWidth="35.0" text="From:" />
+            <TextField fx:id="nodeTo" disable="true" layoutX="185.0" layoutY="89.0" prefHeight="25.0" prefWidth="35.0" />
+            <Label alignment="CENTER_RIGHT" layoutX="142.0" layoutY="89.0" prefHeight="25.0" prefWidth="35.0" text="To:" />
          </children>
       </Pane>
-      <Canvas fx:id="canvas" height="700.0" width="750.0" />
+      <Pane fx:id="paneGraph" prefHeight="700.0" prefWidth="750.0">
+         <children>
+            <Canvas fx:id="canvas" height="700.0" width="760.0" />
+         </children>
+      </Pane>
     </children>
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
