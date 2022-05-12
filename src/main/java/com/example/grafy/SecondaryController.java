@@ -13,7 +13,9 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
+import javafx.stage.FileChooser;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -36,6 +38,7 @@ public class SecondaryController {
     @FXML
     Label cohesionInfoLabel;
 
+    final FileChooser saveFileChooser = new FileChooser();
     @FXML
     Pane paneGraph;
     private GridGraph graph;
@@ -70,6 +73,20 @@ public class SecondaryController {
         paneGraph.getChildren().clear();
         drawGridGraph(paneGraph.getPrefWidth(), paneGraph.getPrefHeight());
     }
+    public void saveButtonAction() throws IOException {
+        saveFileChooser.setTitle("Save graph");
+        saveFileChooser.setInitialFileName("mygraph");
+        saveFileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("text file", "*.txt"));
+
+        try {
+            File file = saveFileChooser.showSaveDialog(null);
+            graph.saveGraph(file.getAbsolutePath());
+            System.out.println("Zapisano");
+        } catch(Exception e) {
+            System.out.println("Nie zapisano");;
+        }
+    }
+
     EventHandler<MouseEvent> onMouseClickedEventHandler = event -> {
         if (event.getSource() instanceof Circle) {
             Circle circle = (Circle) (event.getSource());
@@ -190,7 +207,5 @@ public class SecondaryController {
         System.out.println();
         System.out.println(shortestPathSolution.minimumWeight);
     }
-
-
 }
 
