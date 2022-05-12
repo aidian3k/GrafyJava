@@ -6,11 +6,13 @@ import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Line;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -31,6 +33,8 @@ public class SecondaryController {
     Canvas canvas;
     @FXML
     TextField nodeFrom, nodeTo;
+    @FXML
+    Label cohesionInfoLabel;
 
     @FXML
     Pane paneGraph;
@@ -39,16 +43,11 @@ public class SecondaryController {
     double RATIO_EDGE_NODE_WIDTH=0.15;
     double nodeSize;
     double nodeSeparator;
-    GraphicsContext gc;
     public void initialize() {
-//        GraphHolder holder = GraphHolder.getInstance();
-//        graph = holder.getGraph();
-        gc = canvas.getGraphicsContext2D();
-        drawGridGraph(gc, canvas.getWidth(), canvas.getHeight());
+        drawGridGraph(paneGraph.getPrefWidth(), paneGraph.getPrefHeight());
 
         gridSizeInfoTextField.setText(graph.rowsNum + "x" + graph.colNum);
         weightRangeInfoTextField.setText(graph.minWeight + "-" + graph.maxWeight);
-        //System.out.println(GraphUtils.dijkstra(graph, 1, 19));
 
         shortestPathComboBox.getItems().add("dijkstra");
         shortestPathComboBox.getItems().add("bellman-ford");
@@ -57,10 +56,20 @@ public class SecondaryController {
 
         cohesionComboBox.getItems().add("bfs");
         cohesionComboBox.getItems().add("dfs");
-        cohesionComboBox.getSelectionModel().select(0);
-
     }
-
+    public void cohesionComboBoxAction() {
+        if(cohesionComboBox.getValue() == "bfs") {
+            cohesionInfoLabel.setText(GraphUtils.breathFirstSearch(graph, 0) ? "Is cohesion! [bfs]" : "Not cohesion:( [bfs]");
+        }
+        else if(cohesionComboBox.getValue() == "dfs")
+            cohesionInfoLabel.setText(GraphUtils.depthFirstSearch(graph, 0) ? "Is cohesion! [dfs]" : "Not cohesion:( [dfs]");
+        else
+            cohesionInfoLabel.setText("");
+    }
+    public void redrawButtonAction() {
+        paneGraph.getChildren().clear();
+        drawGridGraph(paneGraph.getPrefWidth(), paneGraph.getPrefHeight());
+    }
     EventHandler<MouseEvent> onMouseClickedEventHandler = event -> {
         if (event.getSource() instanceof Circle) {
             Circle circle = (Circle) (event.getSource());
@@ -85,7 +94,7 @@ public class SecondaryController {
         App.setRoot("primary");
     }
 
-    public void drawGridGraph(GraphicsContext gc, double widthCanvas, double heightCanvas) {
+    public void drawGridGraph(double widthCanvas, double heightCanvas) {
         GraphHolder holder = GraphHolder.getInstance();
         graph = holder.getGraph();
 
@@ -101,7 +110,27 @@ public class SecondaryController {
         double bottomSeparator = nodeSize;
         nodeSeparator = (heightCanvas/rowNum > widthCanvas/colNum) ? (widthCanvas)/colNum : (heightCanvas)/rowNum;
 
+        //Draw edges
+        nodeNum=0;
+        for(int i=0; i<rowNum; i++) {
+            for(int j=0; j<colNum; j++) {
+                LinkedList<Edge> nodeEdges = new LinkedList<Edge>(graph.getConnectionList(nodeNum));
+                double nodeA_X = i * nodeSeparator;
+                double nodeA_Y = j * nodeSeparator;
+                for (Edge edge : nodeEdges) {
+                    int rowNodeB = (int) Math.floor(edge.getNodeTo() / colNum);
+                    int colNodeB = edge.getNodeTo() % colNum;
+//                    System.out.println(nodeNum+" : "+edge.getNodeTo()+"["+rowNodeB+" "+colNodeB+"]  " + rowNodeB * nodeSeparator + " " + colNodeB * nodeSeparator + " "+nodeA_X+" "+nodeA_Y );
+                    Line line = new Line(nodeA_Y+nodeSize/2,nodeA_X+nodeSize/2, colNodeB * nodeSeparator+nodeSize/2, rowNodeB * nodeSeparator+nodeSize/2);
+                    line.setStrokeWidth(RATIO_EDGE_NODE_WIDTH*nodeSize);
+                    paneGraph.getChildren().add(line);
+                }
+                nodeNum++;
+            }
+        }
+
         Circle[] circArray = new Circle[nodesNumbers];
+        nodeNum=0;
         // Draw nodes
         for(int i=0; i<graph.getRowsNum(); i++) {
             if(i==0) {
@@ -122,33 +151,23 @@ public class SecondaryController {
             nodeY += nodeSeparator;
         }
         paneGraph.getChildren().addAll(circArray);
-
-        //Draw edges
-        gc.setLineWidth(RATIO_EDGE_NODE_WIDTH*nodeSize);
-        nodeNum=0;
-        for(int i=0; i<rowNum; i++) {
-            for(int j=0; j<colNum; j++) {
-                LinkedList<Edge> nodeEdges = new LinkedList<Edge>(graph.getConnectionList(nodeNum));
-                double nodeA_X = i * nodeSeparator;
-                double nodeA_Y = j * nodeSeparator;
-                for (Edge edge : nodeEdges) {
-                    int rowNodeB = (int) Math.floor(edge.getNodeTo() / colNum);
-                    int colNodeB = edge.getNodeTo() % colNum;
-//                    System.out.println(nodeNum+" : "+edge.getNodeTo()+"["+rowNodeB+" "+colNodeB+"]  " + rowNodeB * nodeSeparator + " " + colNodeB * nodeSeparator + " "+nodeA_X+" "+nodeA_Y );
-                    gc.strokeLine( nodeA_Y+nodeSize/2,nodeA_X+nodeSize/2, colNodeB * nodeSeparator+nodeSize/2, rowNodeB * nodeSeparator+nodeSize/2);
-                }
-                nodeNum++;
-            }
-        }
-
     }
 
     public void drawShortestPath() {
-        ShortestPathSolution shortestPathSolution=GraphUtils.dijkstra(graph,Integer.parseInt(nodeFrom.getText()),Integer.parseInt(nodeTo.getText()));
+        String shortestPathAlg = (String) shortestPathComboBox.getValue();
+        ShortestPathSolution shortestPathSolution;
+        if( shortestPathAlg.equals("dijkstra")) {
+            shortestPathSolution=GraphUtils.dijkstra(graph,Integer.parseInt(nodeFrom.getText()),Integer.parseInt(nodeTo.getText()));
+        }
+        else if( shortestPathAlg.equals("bellman-ford")) {
+            shortestPathSolution=GraphUtils.bellmanFord(graph,Integer.parseInt(nodeFrom.getText()),Integer.parseInt(nodeTo.getText()));
+        }
+        else {
+            shortestPathSolution=GraphUtils.floydWarshall(graph,Integer.parseInt(nodeFrom.getText()),Integer.parseInt(nodeTo.getText()));
+        }
+
         ArrayList<Integer> path=new ArrayList<>(shortestPathSolution.path);
 
-        gc.setLineWidth((RATIO_EDGE_NODE_WIDTH+0.1)*nodeSize);
-        gc.setStroke(Color.RED);
         int colNum = graph.getColNum();
         int rowNum = graph.getRowsNum();
         for(int i=1; i<path.size(); i++) {
@@ -160,13 +179,18 @@ public class SecondaryController {
             int colNodeB = path.get(i) % colNum;
             double nodeB_X = colNodeB * nodeSeparator+nodeSize/2;
             double nodeB_Y = rowNodeB * nodeSeparator+nodeSize/2;
-            gc.strokeLine(nodeA_X, nodeA_Y, nodeB_X, nodeB_Y);
+
+            Line line = new Line(nodeA_X, nodeA_Y, nodeB_X, nodeB_Y);
+            line.setStrokeWidth((RATIO_EDGE_NODE_WIDTH+0.2)*nodeSize);
+            line.setStroke(Color.RED);
+            paneGraph.getChildren().add(line);
         }
 
         shortestPathSolution.displayPath();
         System.out.println();
         System.out.println(shortestPathSolution.minimumWeight);
     }
+
 
 }
 
