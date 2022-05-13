@@ -134,14 +134,29 @@ public class SecondaryController {
         for(int i=0; i<rowNum; i++) {
             for(int j=0; j<colNum; j++) {
                 LinkedList<Edge> nodeEdges = new LinkedList<Edge>(graph.getConnectionList(nodeNum));
-                double nodeA_X = i * nodeSeparator;
-                double nodeA_Y = j * nodeSeparator;
+                double nodeA_X = j * nodeSeparator;
+                double nodeA_Y = i * nodeSeparator;
                 for (Edge edge : nodeEdges) {
-                    int rowNodeB = (int) Math.floor(edge.getNodeTo() / colNum);
-                    int colNodeB = edge.getNodeTo() % colNum;
-                    System.out.println(nodeNum+" : "+edge.getNodeTo()+"["+rowNodeB+" "+colNodeB+"]  " + rowNodeB * nodeSeparator + " " + colNodeB * nodeSeparator + " "+nodeA_X+" "+nodeA_Y );
-                    Line line = new Line(nodeA_Y+nodeSize/2,nodeA_X+nodeSize/2, colNodeB * nodeSeparator+nodeSize/2, rowNodeB * nodeSeparator+nodeSize/2);
-                    line.setStrokeWidth(RATIO_EDGE_NODE_WIDTH*nodeSize);
+                    int colNodeB = (int) Math.floor(edge.getNodeTo() / colNum);
+                    int rowNodeB = edge.getNodeTo() % colNum;
+//                    System.out.println(nodeNum+" : "+edge.getNodeTo()+"["+rowNodeB+" "+colNodeB+"]  " + rowNodeB * nodeSeparator + " " + colNodeB * nodeSeparator + " "+nodeA_X+" "+nodeA_Y );
+                    double shiftX = RATIO_EDGE_NODE_WIDTH*nodeSize/4;
+                    double shiftY = RATIO_EDGE_NODE_WIDTH*nodeSize/4;
+                    if(edge.getNodeFrom() < edge.getNodeTo()) {
+                        if(nodeA_X == rowNodeB*nodeSeparator)
+                            shiftX *= -1;
+                        if(nodeA_Y == colNodeB * nodeSeparator)
+                            shiftY *= -1;
+                    } else {
+                        if(nodeA_X != rowNodeB*nodeSeparator)
+                            shiftX *= -1;
+                        if(nodeA_Y != colNodeB * nodeSeparator)
+                            shiftY *= -1;
+                    }
+
+                    Line line = new Line(nodeA_X+nodeSize/2+shiftX,nodeA_Y+nodeSize/2+shiftY, rowNodeB * nodeSeparator+nodeSize/2+shiftX, colNodeB * nodeSeparator+nodeSize/2+shiftY);
+                    line.setStrokeWidth(RATIO_EDGE_NODE_WIDTH*nodeSize/2);
+
                     double hue = HUE_MIN + (HUE_MAX-HUE_MIN) * (edge.getWeight()-graph.getMinWeight()) / (graph.getMaxWeight() - graph.getMinWeight());
                     line.setStroke(Color.hsb(hue, 1.0, 1.0));
 
