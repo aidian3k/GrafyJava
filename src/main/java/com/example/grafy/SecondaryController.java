@@ -19,28 +19,28 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class SecondaryController {
-
     @FXML
     private TextField gridSizeInfoTextField;
     @FXML
     private TextField weightRangeInfoTextField;
     @FXML
-    ComboBox shortestPathComboBox;
+    private ComboBox shortestPathComboBox;
     @FXML
-    ComboBox cohesionComboBox;
-
+    private ComboBox cohesionComboBox;
     @FXML
-    Canvas canvas;
+    private TextField pathWeight;
     @FXML
-    TextField nodeFrom, nodeTo;
+    private Canvas canvas;
     @FXML
-    Label cohesionInfoLabel;
-
-    final FileChooser saveFileChooser = new FileChooser();
+    private TextField nodeFrom, nodeTo;
+    @FXML
+    private Label cohesionInfoLabel;
     @FXML
     Pane paneGraph;
+    final FileChooser saveFileChooser = new FileChooser();
     private GridGraph graph;
     double RATIO_EDGE_NODE_SIZE=0.5;
     double RATIO_EDGE_NODE_WIDTH=0.15;
@@ -77,7 +77,6 @@ public class SecondaryController {
         saveFileChooser.setTitle("Save graph");
         saveFileChooser.setInitialFileName("mygraph");
         saveFileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("text file", "*.txt"));
-
         try {
             File file = saveFileChooser.showSaveDialog(null);
             graph.saveGraph(file.getAbsolutePath());
@@ -86,7 +85,6 @@ public class SecondaryController {
             System.out.println("Nie zapisano");;
         }
     }
-
     EventHandler<MouseEvent> onMouseClickedEventHandler = event -> {
         if (event.getSource() instanceof Circle) {
             Circle circle = (Circle) (event.getSource());
@@ -105,12 +103,10 @@ public class SecondaryController {
             }
         }
     };
-
     @FXML
     private void switchToPrimary() throws IOException {
         App.setRoot("primary");
     }
-
     public void drawGridGraph(double widthCanvas, double heightCanvas) {
         GraphHolder holder = GraphHolder.getInstance();
         graph = holder.getGraph();
@@ -118,7 +114,7 @@ public class SecondaryController {
         int colNum = graph.getColNum();
         int rowNum = graph.getRowsNum();
         int nodesNumbers = rowNum * colNum;
-        int nodeNum=0;
+        int nodeNum;
         double nodeX=0;
         double nodeY=0;
         double HUE_MAX = 0;
@@ -127,7 +123,7 @@ public class SecondaryController {
         nodeSize = (heightCanvas/rowNum > widthCanvas/colNum) ? widthCanvas/(colNum+RATIO_EDGE_NODE_SIZE*colNum) : heightCanvas/(rowNum+RATIO_EDGE_NODE_SIZE*colNum);
         double rightSeparator = nodeSize;
         double bottomSeparator = nodeSize;
-        nodeSeparator = (heightCanvas/rowNum > widthCanvas/colNum) ? (widthCanvas)/colNum : (heightCanvas)/rowNum;
+        nodeSeparator = Math.min(heightCanvas / rowNum, widthCanvas / colNum);
 
         //Draw edges
         nodeNum=0;
@@ -189,8 +185,6 @@ public class SecondaryController {
         }
         paneGraph.getChildren().addAll(circArray);
     }
-
-
     public void drawShortestPath() {
         String shortestPathAlg = (String) shortestPathComboBox.getValue();
         ShortestPathSolution shortestPathSolution;
@@ -208,6 +202,7 @@ public class SecondaryController {
 
         int colNum = graph.getColNum();
         int rowNum = graph.getRowsNum();
+        int hue = ThreadLocalRandom.current().nextInt(1, 360);
         for(int i=1; i<path.size(); i++) {
             int rowNodeA = (int) Math.floor(path.get(i-1) / colNum);
             int colNodeA = path.get(i-1) % colNum;
@@ -220,13 +215,12 @@ public class SecondaryController {
 
             Line line = new Line(nodeA_X, nodeA_Y, nodeB_X, nodeB_Y);
             line.setStrokeWidth((RATIO_EDGE_NODE_WIDTH+0.2)*nodeSize);
-            line.setStroke(Color.RED);
+            line.setStroke(Color.hsb(hue, 1.0, 1.0));
             paneGraph.getChildren().add(line);
         }
 
-        shortestPathSolution.displayPath();
-        System.out.println();
-        System.out.println(shortestPathSolution.minimumWeight);
+//        shortestPathSolution.displayPath();
+        pathWeight.setText(String.valueOf(Math.round(shortestPathSolution.minimumWeight * 10000.0) / 10000.0));
     }
 }
 
