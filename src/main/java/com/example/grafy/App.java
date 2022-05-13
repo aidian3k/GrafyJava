@@ -4,9 +4,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 
 import java.io.IOException;
 
@@ -22,6 +20,7 @@ public class App extends Application {
         scene = new Scene(loadFXML("primary"));
         stage.setScene(scene);
         stage.setResizable(false);
+        //stage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResource("src/main/resources/com/example/grafy/images/Icon.png")).toString()));
         stage.setTitle("Graphs");
         stage.show();
     }

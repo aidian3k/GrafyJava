@@ -49,7 +49,7 @@ public class GridGraph extends BasicGraphFunctions {
         }
 
         if(colNum>1) addEdgeToList(i, new Edge(i,i-1,rnd.nextDouble(minWeight,maxWeight)));
-        if(rowsNum>1) addEdgeToList(i, new Edge(i,i+colNum,rnd.nextDouble(minWeight,maxWeight)));
+        if(rowsNum>1) addEdgeToList(i, new Edge(i,i-1,rnd.nextDouble(minWeight,maxWeight)));
 
         i++;
 

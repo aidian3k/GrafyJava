@@ -4,21 +4,20 @@ package com.example.grafy;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.stage.FileChooser;
+import javafx.stage.Modality;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class SecondaryController {
@@ -61,10 +60,10 @@ public class SecondaryController {
         cohesionComboBox.getItems().add("dfs");
     }
     public void cohesionComboBoxAction() {
-        if(cohesionComboBox.getValue() == "bfs") {
+        if(cohesionComboBox.getValue().equals("bfs")) {
             cohesionInfoLabel.setText(GraphUtils.breathFirstSearch(graph, 0) ? "Is cohesion! [bfs]" : "Not cohesion:( [bfs]");
         }
-        else if(cohesionComboBox.getValue() == "dfs")
+        else if(cohesionComboBox.getValue().equals("dfs"))
             cohesionInfoLabel.setText(GraphUtils.depthFirstSearch(graph, 0) ? "Is cohesion! [dfs]" : "Not cohesion:( [dfs]");
         else
             cohesionInfoLabel.setText("");
@@ -85,6 +84,36 @@ public class SecondaryController {
             System.out.println("Nie zapisano");;
         }
     }
+
+    public void displayAlert() throws IOException {
+
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setResizable(false);
+
+        alert.setTitle("Creating new graph alert");
+        alert.setHeaderText("Do you want to save the current graph?");
+        alert.setContentText("If you press no, all the data will be deleted");
+        alert.initModality(Modality.APPLICATION_MODAL);
+
+        ButtonType okButton= new ButtonType("Yes");
+        ButtonType cancelButton= new ButtonType("No");
+        ButtonType buttonTypeCancel = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
+        alert.getButtonTypes().setAll(okButton, cancelButton, buttonTypeCancel);
+
+        Optional<ButtonType> option = alert.showAndWait();
+
+        if(option.get() == okButton){
+            saveButtonAction();
+            switchToPrimary();
+        }
+        else if(option.get() == cancelButton){
+            switchToPrimary();
+        }
+        else {
+            alert.close();
+        }
+    }
+
     EventHandler<MouseEvent> onMouseClickedEventHandler = event -> {
         if (event.getSource() instanceof Circle) {
             Circle circle = (Circle) (event.getSource());
