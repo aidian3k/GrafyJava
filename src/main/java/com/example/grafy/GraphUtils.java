@@ -16,6 +16,7 @@ public class GraphUtils {
         LinkedList<Integer> queue=new LinkedList<>();
         visited[node]=true;
         queue.add(node);
+        queue.add(node);
 
         while(queue.size()!=0){
             node=queue.pollFirst();

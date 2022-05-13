@@ -121,6 +121,8 @@ public class SecondaryController {
         int nodeNum=0;
         double nodeX=0;
         double nodeY=0;
+        double HUE_MAX = 0;
+        double HUE_MIN = 250;
 
         nodeSize = (heightCanvas/rowNum > widthCanvas/colNum) ? widthCanvas/(colNum+RATIO_EDGE_NODE_SIZE*colNum) : heightCanvas/(rowNum+RATIO_EDGE_NODE_SIZE*colNum);
         double rightSeparator = nodeSize;
@@ -140,6 +142,9 @@ public class SecondaryController {
                     System.out.println(nodeNum+" : "+edge.getNodeTo()+"["+rowNodeB+" "+colNodeB+"]  " + rowNodeB * nodeSeparator + " " + colNodeB * nodeSeparator + " "+nodeA_X+" "+nodeA_Y );
                     Line line = new Line(nodeA_Y+nodeSize/2,nodeA_X+nodeSize/2, colNodeB * nodeSeparator+nodeSize/2, rowNodeB * nodeSeparator+nodeSize/2);
                     line.setStrokeWidth(RATIO_EDGE_NODE_WIDTH*nodeSize);
+                    double hue = HUE_MIN + (HUE_MAX-HUE_MIN) * (edge.getWeight()-graph.getMinWeight()) / (graph.getMaxWeight() - graph.getMinWeight());
+                    line.setStroke(Color.hsb(hue, 1.0, 1.0));
+
                     paneGraph.getChildren().add(line);
                 }
                 nodeNum++;
@@ -169,6 +174,7 @@ public class SecondaryController {
         }
         paneGraph.getChildren().addAll(circArray);
     }
+
 
     public void drawShortestPath() {
         String shortestPathAlg = (String) shortestPathComboBox.getValue();
