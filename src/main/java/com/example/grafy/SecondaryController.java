@@ -137,7 +137,7 @@ public class SecondaryController {
                 for (Edge edge : nodeEdges) {
                     int rowNodeB = (int) Math.floor(edge.getNodeTo() / colNum);
                     int colNodeB = edge.getNodeTo() % colNum;
-//                    System.out.println(nodeNum+" : "+edge.getNodeTo()+"["+rowNodeB+" "+colNodeB+"]  " + rowNodeB * nodeSeparator + " " + colNodeB * nodeSeparator + " "+nodeA_X+" "+nodeA_Y );
+                    System.out.println(nodeNum+" : "+edge.getNodeTo()+"["+rowNodeB+" "+colNodeB+"]  " + rowNodeB * nodeSeparator + " " + colNodeB * nodeSeparator + " "+nodeA_X+" "+nodeA_Y );
                     Line line = new Line(nodeA_Y+nodeSize/2,nodeA_X+nodeSize/2, colNodeB * nodeSeparator+nodeSize/2, rowNodeB * nodeSeparator+nodeSize/2);
                     line.setStrokeWidth(RATIO_EDGE_NODE_WIDTH*nodeSize);
                     paneGraph.getChildren().add(line);
