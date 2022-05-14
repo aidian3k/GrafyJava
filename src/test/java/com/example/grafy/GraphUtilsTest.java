@@ -118,6 +118,32 @@ class GraphUtilsTest {
     }
 
     @Test
+    void whenWantingShortestPath_givenGraphWithOneColumn_thenReturnCorrectWeightAndPath() throws IOException {
+
+        //Given
+        GridGraph graph=new GridGraph("src/test/TestGraphs/TestAlgorithms/ShortestPathAlgorithms/Test5_givenGraphWithOneColumn");
+
+        //When
+
+        int [] expectedPath={0,1,2};
+        double expectedWeight=3;
+
+        //Then
+
+        ShortestPathSolution sol1=GraphUtils.dijkstra(graph,0,2);
+        ShortestPathSolution sol2=GraphUtils.bellmanFord(graph,0,2);
+        ShortestPathSolution sol3=GraphUtils.floydWarshall(graph,0,2);
+
+        assertEquals(expectedWeight, sol1.minimumWeight);
+        assertEquals(expectedWeight, sol2.minimumWeight);
+        assertEquals(expectedWeight, sol3.minimumWeight);
+
+        assertTrue(comparePath(sol1.path, expectedPath));
+        assertTrue(comparePath(sol2.path, expectedPath));
+        assertTrue(comparePath(sol3.path, expectedPath));
+    }
+
+    @Test
     void whenWantingShortestPath_givenNonCoherentGraph_thenThrowException() throws IOException {
 
         //Given//When
