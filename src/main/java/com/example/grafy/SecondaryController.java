@@ -5,6 +5,10 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.image.PixelWriter;
+import javafx.scene.image.WritableImage;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -39,17 +43,28 @@ public class SecondaryController {
     private Label cohesionInfoLabel;
     @FXML
     Pane paneGraph;
+    @FXML
+    ImageView colorScaleImg;
+    @FXML
+    Label edgeScaleFrom;
+    @FXML
+    Label edgeScaleTo;
     final FileChooser saveFileChooser = new FileChooser();
     private GridGraph graph;
     double RATIO_EDGE_NODE_SIZE=0.5;
     double RATIO_EDGE_NODE_WIDTH=0.15;
     double nodeSize;
     double nodeSeparator;
+    double HUE_MAX = 0;
+    double HUE_MIN = 250;
     public void initialize() {
         drawGridGraph(paneGraph.getPrefWidth(), paneGraph.getPrefHeight());
+        colorScaleImg.setImage(createColorScaleImage((int) colorScaleImg.getFitWidth(), (int) colorScaleImg.getFitHeight()));
+        edgeScaleFrom.setText(String.valueOf(Math.round(graph.minWeight*100.0)/100.0));
+        edgeScaleTo.setText(String.valueOf(Math.round(graph.maxWeight*100.0)/100.0));
 
         gridSizeInfoTextField.setText(graph.rowsNum + "x" + graph.colNum);
-        weightRangeInfoTextField.setText(graph.minWeight + "-" + graph.maxWeight);
+        weightRangeInfoTextField.setText(Math.round(graph.minWeight*100.0)/100.0 + " - " + Math.round(graph.maxWeight*100.0)/100.0);
 
         shortestPathComboBox.getItems().add("dijkstra");
         shortestPathComboBox.getItems().add("bellman-ford");
@@ -146,8 +161,6 @@ public class SecondaryController {
         int nodeNum;
         double nodeX=0;
         double nodeY=0;
-        double HUE_MAX = 0;
-        double HUE_MIN = 250;
 
         nodeSize = (heightCanvas/rowNum > widthCanvas/colNum) ? widthCanvas/(colNum+RATIO_EDGE_NODE_SIZE*colNum) : heightCanvas/(rowNum+RATIO_EDGE_NODE_SIZE*colNum);
         double rightSeparator = nodeSize;
@@ -250,6 +263,21 @@ public class SecondaryController {
 
 //        shortestPathSolution.displayPath();
         pathWeight.setText(String.valueOf(Math.round(shortestPathSolution.minimumWeight * 10000.0) / 10000.0));
+    }
+
+    public Image createColorScaleImage(int width, int height) {
+        WritableImage image = new WritableImage(width, height);
+        PixelWriter pixelWriter = image.getPixelWriter();
+        double min = graph.getMinWeight();
+        double max = graph.getMaxWeight();
+        for (int x = 0; x < width; x++) {
+            double value = graph.getMinWeight() + (graph.getMaxWeight() - graph.getMinWeight()) * x / width;
+            Color color = Color.hsb(HUE_MIN + (HUE_MAX-HUE_MIN) * (value-min)/(max-min), 1.0, 1.0);
+            for (int y = 0; y < height; y++) {
+                pixelWriter.setColor(x, y, color);
+            }
+        }
+        return image;
     }
 }
 
