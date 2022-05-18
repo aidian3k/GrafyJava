@@ -1,6 +1,6 @@
 package com.example.grafy;
 
-public class Edge implements EdgeInterface {
+public class Edge {
     private final int nodeFrom;
     private final int nodeTo;
     private final double weight;
@@ -11,17 +11,14 @@ public class Edge implements EdgeInterface {
         this.weight=weight;
     }
 
-    @Override
     public int getNodeFrom(){
         return nodeFrom;
     }
 
-    @Override
     public int getNodeTo(){
         return nodeTo;
     }
 
-    @Override
     public double getWeight(){
         return weight;
     }

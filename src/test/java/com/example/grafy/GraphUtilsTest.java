@@ -65,10 +65,24 @@ class GraphUtilsTest {
     }
 
     @Test
+    void whenWantingToCheckCohesion_givenNodeGreaterThanNumOfNodes_thenThrowAnException() {
+
+        //Given//When
+        Throwable exception1 = assertThrows(IllegalArgumentException.class, () -> GraphUtils.breathFirstSearch(new GridGraph("src/test/TestGraphs/TestAlgorithms/CohesionAlgorithms/Test3_givenNodeGreaterThanNumOfNodes"),100));
+        Throwable exception2 = assertThrows(IllegalArgumentException.class, () -> GraphUtils.breathFirstSearch(new GridGraph("src/test/TestGraphs/TestAlgorithms/CohesionAlgorithms/Test3_givenNodeGreaterThanNumOfNodes"),100));
+
+        //Then
+
+        assertEquals("COHERENT_ALGO_PROBLEM: There is a problem with arguments given to the method!", exception1.getMessage());
+        assertEquals("COHERENT_ALGO_PROBLEM: There is a problem with arguments given to the method!", exception2.getMessage());
+
+    }
+
+    @Test
     void whenWantingShortestPath_givenNormalCoherentGraph_thenReturnCorrectWeightAndPath() throws IOException {
 
         //Given
-        GridGraph graph=new GridGraph("/Users/aidian3k/IdeaProjects/Grafy/src/test/TestGraphs/TestAlgorithms/ShortestPathAlgorithms/Test1_givenNormalGraph1");
+        GridGraph graph=new GridGraph("src/test/TestGraphs/TestAlgorithms/ShortestPathAlgorithms/Test1_givenNormalGraph1");
 
         //When
 
@@ -144,7 +158,7 @@ class GraphUtilsTest {
     }
 
     @Test
-    void whenWantingShortestPath_givenNonCoherentGraph_thenThrowException() throws IOException {
+    void whenWantingShortestPath_givenNonCoherentGraph_thenThrowException() {
 
         //Given//When
 
@@ -161,7 +175,7 @@ class GraphUtilsTest {
     }
 
     @Test
-    void whenWantingShortestPath_givenNegativeCycleGraph_thenThrowException() throws IOException {
+    void whenWantingShortestPath_givenNegativeCycleGraph_thenThrowException() {
 
         //Given//When
 
@@ -170,5 +184,21 @@ class GraphUtilsTest {
         //Then
 
         assertEquals("ERROR: Given graph contains cycle!", exception.getMessage());
+    }
+
+    @Test
+    void whenWantingShortestPath_givenNodeGreaterThanNumOfGraphNodes_thenThrowException() {
+
+        //Given//When
+        Throwable exception1=assertThrows(IllegalArgumentException.class, () -> GraphUtils.dijkstra(new GridGraph("src/test/TestGraphs/TestAlgorithms/ShortestPathAlgorithms/Test6_givenNodeGreaterThanNumOfNodes"),100,1));
+        Throwable exception2=assertThrows(IllegalArgumentException.class, () -> GraphUtils.floydWarshall(new GridGraph("src/test/TestGraphs/TestAlgorithms/ShortestPathAlgorithms/Test6_givenNodeGreaterThanNumOfNodes"),100,1));
+        Throwable exception3=assertThrows(IllegalArgumentException.class, () -> GraphUtils.bellmanFord(new GridGraph("src/test/TestGraphs/TestAlgorithms/ShortestPathAlgorithms/Test6_givenNodeGreaterThanNumOfNodes"),100,1));
+
+        //Then
+
+        assertEquals("SHORTEST_PATH_ALGO_PROBLEM: There is a problem with arguments given to the method!", exception1.getMessage());
+        assertEquals("SHORTEST_PATH_ALGO_PROBLEM: There is a problem with arguments given to the method!", exception2.getMessage());
+        assertEquals("SHORTEST_PATH_ALGO_PROBLEM: There is a problem with arguments given to the method!", exception3.getMessage());
+
     }
 }
