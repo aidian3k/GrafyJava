@@ -1,5 +1,5 @@
 package com.example.grafy;
-
+/*
 
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -280,4 +280,6 @@ public class SecondaryController {
         return image;
     }
 }
+
+ */
 

@@ -91,17 +91,26 @@ class GraphUtilsTest {
 
         //Then
 
-        ShortestPathSolution sol1=GraphUtils.dijkstra(graph,0,4);
-        ShortestPathSolution sol2=GraphUtils.bellmanFord(graph,0,4);
-        ShortestPathSolution sol3=GraphUtils.floydWarshall(graph,0,4);
+        ShortestPathSolution sol1=GraphUtils.dijkstra(graph,0);
+        ShortestPathSolution sol2=GraphUtils.bellmanFord(graph,0);
+        ShortestPathSolution sol3=GraphUtils.floydWarshall(graph,0);
 
-        assertEquals(expectedWeight, sol1.minimumWeight);
-        assertEquals(expectedWeight, sol2.minimumWeight);
-        assertEquals(expectedWeight, sol3.minimumWeight);
+        double dijkstraSolution=sol1.getWeightSolution(4);
+        double bellmanFordSolution=sol2.getWeightSolution(4);
+        double floydWarshallSolution=sol3.getWeightSolution(4);
 
-        assertTrue(comparePath(sol1.path, expectedPath));
-        assertTrue(comparePath(sol2.path, expectedPath));
-        assertTrue(comparePath(sol3.path, expectedPath));
+        ArrayList<Integer> dijkstraPathSolution=sol1.getPathSolution(4);
+        ArrayList<Integer> bellmanFordPathSolution=sol1.getPathSolution(4);
+        ArrayList<Integer> floydWarshallPathSolution=sol3.getPathSolution(4);
+
+        assertEquals(expectedWeight, dijkstraSolution);
+        assertEquals(expectedWeight, bellmanFordSolution);
+        assertEquals(expectedWeight, floydWarshallSolution);
+
+        assertTrue(comparePath(dijkstraPathSolution, expectedPath));
+        assertTrue(comparePath(bellmanFordPathSolution, expectedPath));
+        assertTrue(comparePath(floydWarshallPathSolution, expectedPath));
+
     }
 
     @Test
@@ -117,17 +126,25 @@ class GraphUtilsTest {
 
         //Then
 
-        ShortestPathSolution sol1=GraphUtils.dijkstra(graph,11,0);
-        ShortestPathSolution sol2=GraphUtils.bellmanFord(graph,11,0);
-        ShortestPathSolution sol3=GraphUtils.floydWarshall(graph,11,0);
+        ShortestPathSolution sol1=GraphUtils.dijkstra(graph,11);
+        ShortestPathSolution sol2=GraphUtils.bellmanFord(graph,11);
+        ShortestPathSolution sol3=GraphUtils.floydWarshall(graph,11);
 
-        assertEquals(expectedWeight, sol1.minimumWeight);
-        assertEquals(expectedWeight, sol2.minimumWeight);
-        assertEquals(expectedWeight, sol3.minimumWeight);
+        double dijkstraSolution=sol1.getWeightSolution(0);
+        double bellmanFordSolution=sol2.getWeightSolution(0);
+        double floydWarshallSolution=sol3.getWeightSolution(0);
 
-        assertTrue(comparePath(sol1.path, expectedPath));
-        assertTrue(comparePath(sol2.path, expectedPath));
-        assertTrue(comparePath(sol3.path, expectedPath));
+        ArrayList<Integer> dijkstraPathSolution=sol1.getPathSolution(0);
+        ArrayList<Integer> bellmanFordPathSolution=sol1.getPathSolution(0);
+        ArrayList<Integer> floydWarshallPathSolution=sol3.getPathSolution(0);
+
+        assertEquals(expectedWeight, dijkstraSolution);
+        assertEquals(expectedWeight, bellmanFordSolution);
+        assertEquals(expectedWeight, floydWarshallSolution);
+
+        assertTrue(comparePath(dijkstraPathSolution, expectedPath));
+        assertTrue(comparePath(bellmanFordPathSolution, expectedPath));
+        assertTrue(comparePath(floydWarshallPathSolution, expectedPath));
 
     }
 
@@ -144,17 +161,26 @@ class GraphUtilsTest {
 
         //Then
 
-        ShortestPathSolution sol1=GraphUtils.dijkstra(graph,0,2);
-        ShortestPathSolution sol2=GraphUtils.bellmanFord(graph,0,2);
-        ShortestPathSolution sol3=GraphUtils.floydWarshall(graph,0,2);
+        ShortestPathSolution sol1=GraphUtils.dijkstra(graph,0);
+        ShortestPathSolution sol2=GraphUtils.bellmanFord(graph,0);
+        ShortestPathSolution sol3=GraphUtils.floydWarshall(graph,0);
 
-        assertEquals(expectedWeight, sol1.minimumWeight);
-        assertEquals(expectedWeight, sol2.minimumWeight);
-        assertEquals(expectedWeight, sol3.minimumWeight);
+        double dijkstraSolution=sol1.getWeightSolution(2);
+        double bellmanFordSolution=sol2.getWeightSolution(2);
+        double floydWarshallSolution=sol3.getWeightSolution(2);
 
-        assertTrue(comparePath(sol1.path, expectedPath));
-        assertTrue(comparePath(sol2.path, expectedPath));
-        assertTrue(comparePath(sol3.path, expectedPath));
+        ArrayList<Integer> dijkstraPathSolution=sol1.getPathSolution(2);
+        ArrayList<Integer> bellmanFordPathSolution=sol1.getPathSolution(2);
+        ArrayList<Integer> floydWarshallPathSolution=sol3.getPathSolution(2);
+
+        assertEquals(expectedWeight, dijkstraSolution);
+        assertEquals(expectedWeight, bellmanFordSolution);
+        assertEquals(expectedWeight, floydWarshallSolution);
+
+        assertTrue(comparePath(dijkstraPathSolution, expectedPath));
+        assertTrue(comparePath(bellmanFordPathSolution, expectedPath));
+        assertTrue(comparePath(floydWarshallPathSolution, expectedPath));
+
     }
 
     @Test
@@ -162,9 +188,9 @@ class GraphUtilsTest {
 
         //Given//When
 
-        Throwable exception1=assertThrows(IllegalArgumentException.class, () -> GraphUtils.dijkstra(new GridGraph("src/test/TestGraphs/TestAlgorithms/ShortestPathAlgorithms/Test3_givenNonCoherentGraph"),0,1));
-        Throwable exception2=assertThrows(IllegalArgumentException.class, () -> GraphUtils.floydWarshall(new GridGraph("src/test/TestGraphs/TestAlgorithms/ShortestPathAlgorithms/Test3_givenNonCoherentGraph"),0,1));
-        Throwable exception3=assertThrows(IllegalArgumentException.class, () -> GraphUtils.bellmanFord(new GridGraph("src/test/TestGraphs/TestAlgorithms/ShortestPathAlgorithms/Test3_givenNonCoherentGraph"),0,1));
+        Throwable exception1=assertThrows(IllegalArgumentException.class, () -> GraphUtils.dijkstra(new GridGraph("src/test/TestGraphs/TestAlgorithms/ShortestPathAlgorithms/Test3_givenNonCoherentGraph"),0));
+        Throwable exception2=assertThrows(IllegalArgumentException.class, () -> GraphUtils.floydWarshall(new GridGraph("src/test/TestGraphs/TestAlgorithms/ShortestPathAlgorithms/Test3_givenNonCoherentGraph"),0));
+        Throwable exception3=assertThrows(IllegalArgumentException.class, () -> GraphUtils.bellmanFord(new GridGraph("src/test/TestGraphs/TestAlgorithms/ShortestPathAlgorithms/Test3_givenNonCoherentGraph"),0));
 
         //Then
 
@@ -179,7 +205,7 @@ class GraphUtilsTest {
 
         //Given//When
 
-        Throwable exception=assertThrows(IllegalArgumentException.class, () -> GraphUtils.bellmanFord(new GridGraph("src/test/TestGraphs/TestAlgorithms/ShortestPathAlgorithms/Test4_givenNegativeCycleGraph"),0,1));
+        Throwable exception=assertThrows(IllegalArgumentException.class, () -> GraphUtils.bellmanFord(new GridGraph("src/test/TestGraphs/TestAlgorithms/ShortestPathAlgorithms/Test4_givenNegativeCycleGraph"),0));
 
         //Then
 
@@ -190,9 +216,9 @@ class GraphUtilsTest {
     void whenWantingShortestPath_givenNodeGreaterThanNumOfGraphNodes_thenThrowException() {
 
         //Given//When
-        Throwable exception1=assertThrows(IllegalArgumentException.class, () -> GraphUtils.dijkstra(new GridGraph("src/test/TestGraphs/TestAlgorithms/ShortestPathAlgorithms/Test6_givenNodeGreaterThanNumOfNodes"),100,1));
-        Throwable exception2=assertThrows(IllegalArgumentException.class, () -> GraphUtils.floydWarshall(new GridGraph("src/test/TestGraphs/TestAlgorithms/ShortestPathAlgorithms/Test6_givenNodeGreaterThanNumOfNodes"),100,1));
-        Throwable exception3=assertThrows(IllegalArgumentException.class, () -> GraphUtils.bellmanFord(new GridGraph("src/test/TestGraphs/TestAlgorithms/ShortestPathAlgorithms/Test6_givenNodeGreaterThanNumOfNodes"),100,1));
+        Throwable exception1=assertThrows(IllegalArgumentException.class, () -> GraphUtils.dijkstra(new GridGraph("src/test/TestGraphs/TestAlgorithms/ShortestPathAlgorithms/Test6_givenNodeGreaterThanNumOfNodes"),100));
+        Throwable exception2=assertThrows(IllegalArgumentException.class, () -> GraphUtils.floydWarshall(new GridGraph("src/test/TestGraphs/TestAlgorithms/ShortestPathAlgorithms/Test6_givenNodeGreaterThanNumOfNodes"),100));
+        Throwable exception3=assertThrows(IllegalArgumentException.class, () -> GraphUtils.bellmanFord(new GridGraph("src/test/TestGraphs/TestAlgorithms/ShortestPathAlgorithms/Test6_givenNodeGreaterThanNumOfNodes"),100));
 
         //Then
 
@@ -201,4 +227,5 @@ class GraphUtilsTest {
         assertEquals("SHORTEST_PATH_ALGO_PROBLEM: There is a problem with arguments given to the method!", exception3.getMessage());
 
     }
+
 }
