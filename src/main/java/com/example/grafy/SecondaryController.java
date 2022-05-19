@@ -49,6 +49,8 @@ public class SecondaryController {
     Label edgeScaleFrom;
     @FXML
     Label edgeScaleTo;
+    @FXML
+    ScrollPane scrollPane;
     final FileChooser saveFileChooser = new FileChooser();
     private GridGraph graph;
     double RATIO_EDGE_NODE_SIZE=0.5;

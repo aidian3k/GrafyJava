@@ -11,11 +11,12 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 
-<ScrollPane fx:id="scrollPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="757.0" prefWidth="810.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.grafy.SecondaryController">
+
+<ScrollPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="947.0" prefWidth="810.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
    <content>
-      <VBox alignment="TOP_CENTER" prefHeight="749.0" prefWidth="800.0" spacing="20.0">
+      <VBox alignment="TOP_CENTER" prefHeight="949.0" prefWidth="800.0" spacing="20.0">
          <children>
-            <Pane prefHeight="119.0" prefWidth="760.0">
+            <Pane prefHeight="132.0" prefWidth="673.0">
                <children>
                   <Label alignment="CENTER_RIGHT" prefHeight="25.0" prefWidth="53.0" text="Grid size:" />
                   <TextField fx:id="gridSizeInfoTextField" disable="true" layoutX="59.0" prefHeight="25.0" prefWidth="76.0" />
@@ -37,12 +38,12 @@
                   <TextField fx:id="pathWeight" disable="true" layoutX="330.0" layoutY="89.0" prefHeight="25.0" prefWidth="100.0" />
                </children>
             </Pane>
-            <Pane fx:id="paneGraph" prefHeight="482.0" prefWidth="760.0">
+            <Pane fx:id="paneGraph" prefHeight="515.0" prefWidth="873.0">
                <children>
-                  <Canvas fx:id="canvas" layoutY="570.0" width="760.0" />
+                  <Canvas fx:id="canvas" height="20.0" layoutY="570.0" width="760.0" />
                </children>
             </Pane>
-            <Pane prefHeight="63.0" prefWidth="760.0">
+            <Pane prefHeight="27.0" prefWidth="789.0">
                <children>
                   <ImageView fx:id="colorScaleImg" fitHeight="15.0" fitWidth="800.0" layoutX="-21.0" layoutY="21.0" pickOnBounds="true" preserveRatio="true" />
                   <Label alignment="CENTER" layoutX="-20.0" layoutY="1.0" prefHeight="25.0" prefWidth="804.0" text="Edge color scale" textFill="#00000082" />
