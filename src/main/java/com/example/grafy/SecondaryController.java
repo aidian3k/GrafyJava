@@ -1,5 +1,4 @@
 package com.example.grafy;
-/*
 
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -19,9 +18,7 @@ import javafx.stage.Modality;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class SecondaryController {
@@ -38,7 +35,9 @@ public class SecondaryController {
     @FXML
     private Canvas canvas;
     @FXML
-    private TextField nodeFrom, nodeTo;
+    private TextField nodeFrom;
+    @FXML
+    private TextField nodeTo;
     @FXML
     private Label cohesionInfoLabel;
     @FXML
@@ -57,6 +56,8 @@ public class SecondaryController {
     double nodeSeparator;
     double HUE_MAX = 0;
     double HUE_MIN = 250;
+    Circle[] circArray;
+    ShortestPathSolution shortestPathSolution;
     public void initialize() {
         drawGridGraph(paneGraph.getPrefWidth(), paneGraph.getPrefHeight());
         colorScaleImg.setImage(createColorScaleImage((int) colorScaleImg.getFitWidth(), (int) colorScaleImg.getFitHeight()));
@@ -85,6 +86,8 @@ public class SecondaryController {
     }
     public void redrawButtonAction() {
         paneGraph.getChildren().clear();
+        nodeFrom.setText(null);
+        nodeTo.setText(null);
         drawGridGraph(paneGraph.getPrefWidth(), paneGraph.getPrefHeight());
     }
     public void saveButtonAction() throws IOException {
@@ -133,13 +136,14 @@ public class SecondaryController {
         if (event.getSource() instanceof Circle) {
             Circle circle = (Circle) (event.getSource());
             System.out.println(circle.getId());
-            circle.setFill(Color.GREEN);
+           // circle.setFill(Color.GREEN);
             if(nodeFrom.getText() != null && nodeTo.getText() != null) {
                 nodeFrom.setText(null);
                 nodeTo.setText(null);
             }
             if(nodeFrom.getText() == null) {
                 nodeFrom.setText(circle.getId());
+                colorNodesByDistance();
             }
             else if(nodeTo.getText() == null) {
                 nodeTo.setText(circle.getId());
@@ -147,6 +151,25 @@ public class SecondaryController {
             }
         }
     };
+    public void colorNodesByDistance() {
+        String shortestPathAlg = (String) shortestPathComboBox.getValue();
+        if( shortestPathAlg.equals("dijkstra")) {
+            shortestPathSolution=GraphUtils.dijkstra(graph, Integer.parseInt(nodeFrom.getText()));
+        }
+        else if( shortestPathAlg.equals("bellman-ford")) {
+            shortestPathSolution=GraphUtils.bellmanFord(graph,Integer.parseInt(nodeFrom.getText()));
+        }
+        else {
+            shortestPathSolution=GraphUtils.floydWarshall(graph,Integer.parseInt(nodeFrom.getText()));
+        }
+        for(int i=0; i<graph.getRowsNum()*graph.getRowsNum(); i++) {
+            DoubleSummaryStatistics stat = Arrays.stream(shortestPathSolution.weightArray).summaryStatistics();
+            double min = stat.getMin();
+            double max = stat.getMax();
+            double hue = HUE_MIN + (HUE_MAX-HUE_MIN) * (shortestPathSolution.getWeightSolution(i)-min) / (max - min);
+            circArray[i].setFill(Color.hsb(hue, 1.0, 1.0 ));
+        }
+    }
     @FXML
     private void switchToPrimary() throws IOException {
         App.setRoot("primary");
@@ -204,7 +227,7 @@ public class SecondaryController {
             }
         }
 
-        Circle[] circArray = new Circle[nodesNumbers];
+        circArray = new Circle[nodesNumbers];
         nodeNum=0;
         // Draw nodes
         for(int i=0; i<graph.getRowsNum(); i++) {
@@ -229,18 +252,18 @@ public class SecondaryController {
     }
     public void drawShortestPath() {
         String shortestPathAlg = (String) shortestPathComboBox.getValue();
-        ShortestPathSolution shortestPathSolution;
+
         if( shortestPathAlg.equals("dijkstra")) {
-            shortestPathSolution=GraphUtils.dijkstra(graph,Integer.parseInt(nodeFrom.getText()),Integer.parseInt(nodeTo.getText()));
+            shortestPathSolution=GraphUtils.dijkstra(graph,Integer.parseInt(nodeFrom.getText()));
         }
         else if( shortestPathAlg.equals("bellman-ford")) {
-            shortestPathSolution=GraphUtils.bellmanFord(graph,Integer.parseInt(nodeFrom.getText()),Integer.parseInt(nodeTo.getText()));
+            shortestPathSolution=GraphUtils.bellmanFord(graph,Integer.parseInt(nodeFrom.getText()));
         }
         else {
-            shortestPathSolution=GraphUtils.floydWarshall(graph,Integer.parseInt(nodeFrom.getText()),Integer.parseInt(nodeTo.getText()));
+            shortestPathSolution=GraphUtils.floydWarshall(graph,Integer.parseInt(nodeFrom.getText()));
         }
 
-        ArrayList<Integer> path=new ArrayList<>(shortestPathSolution.path);
+        ArrayList<Integer> path=new ArrayList<>(shortestPathSolution.getPathSolution(Integer.parseInt(nodeTo.getText())));
 
         int colNum = graph.getColNum();
         int rowNum = graph.getRowsNum();
@@ -262,7 +285,7 @@ public class SecondaryController {
         }
 
 //        shortestPathSolution.displayPath();
-        pathWeight.setText(String.valueOf(Math.round(shortestPathSolution.minimumWeight * 10000.0) / 10000.0));
+        pathWeight.setText(String.valueOf(Math.round(shortestPathSolution.getWeightSolution(Integer.parseInt(nodeTo.getText())) * 10000.0) / 10000.0));
     }
 
     public Image createColorScaleImage(int width, int height) {
@@ -281,5 +304,5 @@ public class SecondaryController {
     }
 }
 
- */
+
 
