@@ -51,7 +51,6 @@ public class BasicGraphFunctions {
             double maxWeightIn=Double.NEGATIVE_INFINITY;
             rowsNum=Integer.parseInt(words[0]);
             colNum=Integer.parseInt(words[1]);
-            int graphSize=rowsNum*colNum;
 
             for (int c = 0; c < colNum; c++) {
                 for (int r = 0; r < rowsNum; r++) {
@@ -60,7 +59,7 @@ public class BasicGraphFunctions {
             }
 
             int nodeNum = 0;
-            String line=null;
+            String line;
 
             while((line=br.readLine())!=null){
                 words=line.split("[\s:]+");

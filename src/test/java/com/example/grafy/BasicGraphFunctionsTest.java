@@ -1,6 +1,7 @@
 package com.example.grafy;
 
 import org.junit.jupiter.api.Test;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -88,17 +89,17 @@ class BasicGraphFunctionsTest {
 
         //Then
 
-            Path of = Path.of("src/test/TestGraphs/TestReadingAndSaving/Test5_givenGraphIsCorrect");
-            Path path = Path.of("src/test/TestGraphs/TestReadingAndSaving/TestIsTheSame");
-            if (Files.size(of) != Files.size(path)) {
-                isEqual=false;
-            }
+        Path of = Path.of("src/test/TestGraphs/TestReadingAndSaving/Test5_givenGraphIsCorrect");
+        Path path = Path.of("src/test/TestGraphs/TestReadingAndSaving/TestIsTheSame");
+        if (Files.size(of) != Files.size(path)) {
+            isEqual=false;
+        }
 
-            byte[] first = Files.readAllBytes(of);
-            byte[] second = Files.readAllBytes(path);
-            isEqual= Arrays.equals(first, second);
+        byte[] first = Files.readAllBytes(of);
+        byte[] second = Files.readAllBytes(path);
+        isEqual= Arrays.equals(first, second);
 
-            assertFalse(isEqual);
+        assertFalse(isEqual);
 
     }
 }

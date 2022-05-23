@@ -16,6 +16,7 @@ public class GraphUtils {
         LinkedList<Integer> queue=new LinkedList<>();
         visited[node]=true;
         queue.add(node);
+        queue.add(node);
 
         while(queue.size()!=0){
             node=queue.pollFirst();
@@ -72,9 +73,9 @@ public class GraphUtils {
         return true; //This algorithm is very similar to the BFS, the difference is that LinkedList is replaced by the Stack
     }
 
-    public static ShortestPathSolution dijkstra(GridGraph g, int nodeA, int nodeB){
+    public static ShortestPathSolution dijkstra(GridGraph g, int nodeA){
 
-        if(g==null || nodeA>=g.getNodesNum() || nodeB>=g.getNodesNum() || !GraphUtils.breathFirstSearch(g,nodeA)){
+        if(g==null || nodeA>=g.getNodesNum() || !GraphUtils.breathFirstSearch(g,nodeA)){
             throw new IllegalArgumentException("SHORTEST_PATH_ALGO_PROBLEM: There is a problem with arguments given to the method!");
         }
 
@@ -108,12 +109,12 @@ public class GraphUtils {
 
         }
 
-        return new ShortestPathSolution(nodeA, nodeB, prev, distance);
+        return new ShortestPathSolution(nodeA, prev, distance);
     }
 
-    public static ShortestPathSolution bellmanFord(GridGraph g, int nodeA, int nodeB){
+    public static ShortestPathSolution bellmanFord(GridGraph g, int nodeA){
 
-        if(g==null || nodeA>=g.getNodesNum() || nodeB>=g.getNodesNum() || !GraphUtils.breathFirstSearch(g,nodeA)){
+        if(g==null || nodeA>=g.getNodesNum() || !GraphUtils.breathFirstSearch(g,nodeA)){
             throw new IllegalArgumentException("SHORTEST_PATH_ALGO_PROBLEM: There is a problem with arguments given to the method!");
         }
 
@@ -154,12 +155,12 @@ public class GraphUtils {
             }
         }
 
-        return new ShortestPathSolution(nodeA, nodeB, prev, distance); //Time complexity of the algorithm is O(n^3), the advantage of that algorithm is that it accepts negative weights
+        return new ShortestPathSolution(nodeA, prev, distance); //Time complexity of the algorithm is O(n^3), the advantage of that algorithm is that it accepts negative weights
     }
 
-    public static ShortestPathSolution floydWarshall(GridGraph g, int nodeA, int nodeB){
+    public static ShortestPathSolution floydWarshall(GridGraph g, int nodeA){
 
-        if(g==null || nodeA>=g.getNodesNum() || nodeB>=g.getNodesNum() || !GraphUtils.breathFirstSearch(g,nodeA)){
+        if(g==null || nodeA>=g.getNodesNum() || !GraphUtils.breathFirstSearch(g,nodeA)){
             throw new IllegalArgumentException("SHORTEST_PATH_ALGO_PROBLEM: There is a problem with arguments given to the method!");
         }
 
@@ -199,7 +200,9 @@ public class GraphUtils {
             }
         }
 
-        return new ShortestPathSolution(nodeA, nodeB, distance, path); //Algorithm, which finds paths between all pairs of vertexes. Algorithm also allows us to have negative weights. Time complexity O(n^3).
+        double [] distanceAnswer=distance[nodeA];
+
+        return new ShortestPathSolution(nodeA, path, distanceAnswer); //Algorithm, which finds paths between all pairs of vertexes. Algorithm also allows us to have negative weights. Time complexity O(n^3).
     }
 
 }

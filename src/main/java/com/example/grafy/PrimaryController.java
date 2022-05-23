@@ -4,59 +4,79 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 public class PrimaryController {
     @FXML
-    private TextField gridSizeInputTextField;
+    private TextField gridSizeXInputTextField;
     @FXML
-    private TextField weightRangeInputTextField;
-
+    private TextField gridSizeYInputTextField;
+    @FXML
+    private TextField weightRangeStartInputTextField;
+    @FXML
+    private TextField weightRangeEndInputTextField;
     @FXML
     private TextField fileNameTextField;
-
-    final FileChooser fileChooser = new FileChooser();
-
     @FXML
-    private void generateButtonPressed() throws IOException {
-        String[] gridSize = gridSizeInputTextField.getText().split("x");
-        int rowNum = Integer.parseInt(gridSize[0]);
-        int colNum = Integer.parseInt(gridSize[1]);
-        String[] range = weightRangeInputTextField.getText().split("-");
+    private Label warningLabel;
+    final FileChooser fileChooser = new FileChooser();
+    @FXML
+    private void generateButtonAction() throws IOException {
+        try {
+            int rowNum, colNum;
+            double minWeight, maxWeight;
+            rowNum = Integer.parseInt(gridSizeXInputTextField.getText());
+            colNum = Integer.parseInt(gridSizeYInputTextField.getText());
+            minWeight = Double.parseDouble(weightRangeStartInputTextField.getText());
+            maxWeight = Double.parseDouble(weightRangeEndInputTextField.getText());
 
-        double minWeight = Double.parseDouble(range[0]);
-        double maxWeight = Double.parseDouble(range[1]);
-
-        GridGraph graph=new GridGraph(rowNum, colNum, minWeight, maxWeight);
-        GraphHolder holder = GraphHolder.getInstance();
-        holder.setGraph(graph);
-
-        switchToSecondary();
+            if(rowNum<=0 || colNum<=0 || colNum>150 || rowNum>150)
+                warningLabel.setText("Rows and columns numbers must be in <1-150>");
+            else if(maxWeight <= minWeight)
+                warningLabel.setText("First number of edge weight range must be bigger than second!");
+            else {
+                GridGraph graph = new GridGraph(rowNum, colNum, minWeight, maxWeight);
+                GraphHolder holder = GraphHolder.getInstance();
+                holder.setGraph(graph);
+                switchToSecondary();
+            }
+        } catch(NumberFormatException e) {
+            warningLabel.setText("Wrong input!");
+        }
     }
     @FXML
-    private void generateFromFileButtonPressed() throws IOException {
-        GridGraph graph=new GridGraph(fileNameTextField.getText());
-        GraphHolder holder = GraphHolder.getInstance();
-        holder.setGraph(graph);
+    private void generateFromFileButtonAction() throws IOException {
+        try {
+            GridGraph graph = new GridGraph(fileNameTextField.getText());
+            GraphHolder holder = GraphHolder.getInstance();
+            holder.setGraph(graph);
 
-        switchToSecondary();
+            switchToSecondary();
+        } catch(FileNotFoundException e) {
+            warningLabel.setText("File was not found!");
+        } catch(IOException e) {
+            warningLabel.setText("There is a problem with reading given graph, check the file with graph!");
+        }
     }
     @FXML
     private void switchToSecondary() throws IOException {
         App.setRoot("secondary");
     }
-
     @FXML
     private void handleChooseFileButton() {
         fileChooser.setTitle("Graph File Chooser");
         fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("text file", "*.txt"));
+
         File file = fileChooser.showOpenDialog(null);
         if(file != null) {
             fileNameTextField.setText(file.getAbsolutePath());
@@ -65,13 +85,59 @@ public class PrimaryController {
             fileNameTextField.setText("");
         }
     }
-
-    public String getGridSizeInput() {
-        return gridSizeInputTextField.getText();
+    public String getGridSizeXInput() {
+        return gridSizeXInputTextField.getText();
+    }
+    public String getGridSizeYInput() {
+        return gridSizeXInputTextField.getText();
     }
 
-    public String getWeightRangeInput() {
-        return weightRangeInputTextField.getText();
+    public String getWeightStartRangeInput() {
+        return weightRangeStartInputTextField.getText();
     }
 
+    public String getWeightRangeEndInputTextField() {
+        return weightRangeEndInputTextField.getText();
+    }
+
+    @FXML
+    private void watchDecimalInputStart() {
+        String input = weightRangeStartInputTextField.getText();
+        int size = input.length();
+
+        if(!input.matches("^[0-9]*\\.?[0-9]*$")) {
+            weightRangeStartInputTextField.setText(input.substring(0,size-1));
+            weightRangeStartInputTextField.positionCaret(size-1);
+        }
+    }
+    @FXML
+    private void watchDecimalInputEnd() {
+        String input = weightRangeEndInputTextField.getText();
+        int size = input.length();
+
+        if(!input.matches("^[0-9]*\\.?[0-9]*$")) {
+            weightRangeEndInputTextField.setText(input.substring(0,size-1));
+            weightRangeEndInputTextField.positionCaret(size-1);
+        }
+    }
+    @FXML
+    private void watchIntInputX() {
+        String input = gridSizeXInputTextField.getText();
+        int size = input.length();
+
+        if(!input.matches("^[0-9]*")) {
+            gridSizeXInputTextField.setText(input.substring(0,size-1));
+            gridSizeXInputTextField.positionCaret(size-1);
+        }
+    }
+    @FXML
+    private void watchIntInputY() {
+        String input = gridSizeYInputTextField.getText();
+        int size = input.length();
+
+        if(!input.matches("^[0-9]*")) {
+            gridSizeYInputTextField.setText(input.substring(0,size-1));
+            gridSizeYInputTextField.positionCaret(size-1);
+        }
+    }
 }
