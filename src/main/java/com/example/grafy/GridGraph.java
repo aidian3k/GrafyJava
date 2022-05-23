@@ -23,14 +23,13 @@ public class GridGraph extends BasicGraphFunctions {
 
         for (int c = 0; c < colNum; c++) {
             for (int r = 0; r < rowsNum; r++) {
-                int num = c * rowsNum + r;
                 graph.add(new LinkedList<>()); //Initializing memory for the graph representation
             }
         }
 
         int i=0;
 
-        if(colNum==1){
+        if(colNum==1 && rowsNum!=1){
             addEdgeToList(i, new Edge(i, i + 1, rnd.nextDouble(minWeight, maxWeight)));
 
             ++i;
@@ -44,7 +43,7 @@ public class GridGraph extends BasicGraphFunctions {
 
         }
         else {
-            if (colNum > 1) {
+            if(colNum>1) {
                 addEdgeToList(i, new Edge(i, i + 1, rnd.nextDouble(minWeight, maxWeight)));
             }
 
@@ -64,9 +63,12 @@ public class GridGraph extends BasicGraphFunctions {
                 }
             }
 
-            if (colNum > 1) addEdgeToList(i, new Edge(i, i - 1, rnd.nextDouble(minWeight, maxWeight)));
-            if (rowsNum > 1) addEdgeToList(i, new Edge(i, i - 1, rnd.nextDouble(minWeight, maxWeight)));
-
+            if (colNum>1){
+                addEdgeToList(i, new Edge(i, i - 1, rnd.nextDouble(minWeight, maxWeight)));
+            }
+            if (rowsNum > 1) {
+                addEdgeToList(i, new Edge(i, i + colNum, rnd.nextDouble(minWeight, maxWeight)));
+            }
             i++;
 
             for (; i < (rowsNum - 1) * colNum; i++) {

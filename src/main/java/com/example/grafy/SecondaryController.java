@@ -48,6 +48,8 @@ public class SecondaryController {
     Label edgeScaleFrom;
     @FXML
     Label edgeScaleTo;
+    @FXML
+    private Label time;
     final FileChooser saveFileChooser = new FileChooser();
     private GridGraph graph;
     double RATIO_EDGE_NODE_SIZE=0.5;
@@ -136,14 +138,13 @@ public class SecondaryController {
         if (event.getSource() instanceof Circle) {
             Circle circle = (Circle) (event.getSource());
             System.out.println(circle.getId());
-            // circle.setFill(Color.GREEN);
             if(nodeFrom.getText() != null && nodeTo.getText() != null) {
-
                 nodeTo.setText(null);
             }
             if(nodeFrom.getText() == null) {
                 nodeFrom.setText(circle.getId());
                 colorNodesByDistance();
+                circArray[(Integer.parseInt(circle.getId()))].setFill(Color.LIGHTGREY);
             }
             else if(nodeTo.getText() == null) {
                 nodeTo.setText(circle.getId());
@@ -155,12 +156,15 @@ public class SecondaryController {
         String shortestPathAlg = (String) shortestPathComboBox.getValue();
         if( shortestPathAlg.equals("dijkstra")) {
             shortestPathSolution=GraphUtils.dijkstra(graph, Integer.parseInt(nodeFrom.getText()));
+            time.setText("Choose the node to draw path!");
         }
         else if( shortestPathAlg.equals("bellman-ford")) {
             shortestPathSolution=GraphUtils.bellmanFord(graph,Integer.parseInt(nodeFrom.getText()));
+            time.setText("Choose the node to draw path!");
         }
         else {
             shortestPathSolution=GraphUtils.floydWarshall(graph,Integer.parseInt(nodeFrom.getText()));
+            time.setText("Choose the node to draw path!");
         }
         for(int i=0; i<graph.getRowsNum()*graph.getColNum(); i++) {
             DoubleSummaryStatistics stat = Arrays.stream(shortestPathSolution.weightArray).summaryStatistics();
@@ -177,6 +181,7 @@ public class SecondaryController {
     public void drawGridGraph(double widthCanvas, double heightCanvas) {
         GraphHolder holder = GraphHolder.getInstance();
         graph = holder.getGraph();
+        time.setText("Choose the initial node");
 
         paneGraph.setStyle("-fx-background-color: #000000");
         nodeFrom.setText(null);
@@ -207,7 +212,6 @@ public class SecondaryController {
                 for (Edge edge : nodeEdges) {
                     int colNodeB = (int) Math.floor(edge.getNodeTo() / colNum);
                     int rowNodeB = edge.getNodeTo() % colNum;
-//                    System.out.println(nodeNum+" : "+edge.getNodeTo()+"["+rowNodeB+" "+colNodeB+"]  " + rowNodeB * nodeSeparator + " " + colNodeB * nodeSeparator + " "+nodeA_X+" "+nodeA_Y );
                     double shiftX = RATIO_EDGE_NODE_WIDTH*nodeSize/4;
                     double shiftY = RATIO_EDGE_NODE_WIDTH*nodeSize/4;
                     if(edge.getNodeFrom() < edge.getNodeTo()) {
