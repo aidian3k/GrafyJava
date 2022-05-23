@@ -136,9 +136,9 @@ public class SecondaryController {
         if (event.getSource() instanceof Circle) {
             Circle circle = (Circle) (event.getSource());
             System.out.println(circle.getId());
-           // circle.setFill(Color.GREEN);
+            // circle.setFill(Color.GREEN);
             if(nodeFrom.getText() != null && nodeTo.getText() != null) {
-                nodeFrom.setText(null);
+
                 nodeTo.setText(null);
             }
             if(nodeFrom.getText() == null) {
@@ -162,7 +162,7 @@ public class SecondaryController {
         else {
             shortestPathSolution=GraphUtils.floydWarshall(graph,Integer.parseInt(nodeFrom.getText()));
         }
-        for(int i=0; i<graph.getRowsNum()*graph.getRowsNum(); i++) {
+        for(int i=0; i<graph.getRowsNum()*graph.getColNum(); i++) {
             DoubleSummaryStatistics stat = Arrays.stream(shortestPathSolution.weightArray).summaryStatistics();
             double min = stat.getMin();
             double max = stat.getMax();
@@ -178,14 +178,21 @@ public class SecondaryController {
         GraphHolder holder = GraphHolder.getInstance();
         graph = holder.getGraph();
 
+        paneGraph.setStyle("-fx-background-color: #000000");
+        nodeFrom.setText(null);
+        nodeTo.setText(null);
+
         int colNum = graph.getColNum();
         int rowNum = graph.getRowsNum();
         int nodesNumbers = rowNum * colNum;
         int nodeNum;
         double nodeX=0;
         double nodeY=0;
+        if(rowNum<100 && colNum<100)
+            nodeSize = (heightCanvas/rowNum > widthCanvas/colNum) ? widthCanvas/(colNum+RATIO_EDGE_NODE_SIZE*colNum) : heightCanvas/(rowNum+RATIO_EDGE_NODE_SIZE*colNum);
+        else
+            nodeSize = (heightCanvas/rowNum > widthCanvas/colNum) ? widthCanvas/(colNum) : heightCanvas/(rowNum);
 
-        nodeSize = (heightCanvas/rowNum > widthCanvas/colNum) ? widthCanvas/(colNum+RATIO_EDGE_NODE_SIZE*colNum) : heightCanvas/(rowNum+RATIO_EDGE_NODE_SIZE*colNum);
         double rightSeparator = nodeSize;
         double bottomSeparator = nodeSize;
         nodeSeparator = Math.min(heightCanvas / rowNum, widthCanvas / colNum);
@@ -267,7 +274,7 @@ public class SecondaryController {
 
         int colNum = graph.getColNum();
         int rowNum = graph.getRowsNum();
-        int hue = ThreadLocalRandom.current().nextInt(1, 360);
+        //int hue = ThreadLocalRandom.current().nextInt(1, 360);
         for(int i=1; i<path.size(); i++) {
             int rowNodeA = (int) Math.floor(path.get(i-1) / colNum);
             int colNodeA = path.get(i-1) % colNum;
@@ -280,7 +287,8 @@ public class SecondaryController {
 
             Line line = new Line(nodeA_X, nodeA_Y, nodeB_X, nodeB_Y);
             line.setStrokeWidth((RATIO_EDGE_NODE_WIDTH+0.2)*nodeSize);
-            line.setStroke(Color.hsb(hue, 1.0, 1.0));
+//            line.setStroke(Color.hsb(hue, 1.0, 1.0));
+            line.setStroke(Color.WHITE);
             paneGraph.getChildren().add(line);
         }
 
