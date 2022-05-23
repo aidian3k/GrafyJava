@@ -2,7 +2,6 @@ package com.example.grafy;
 
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.canvas.Canvas;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -19,7 +18,6 @@ import javafx.stage.Modality;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
-import java.util.concurrent.ThreadLocalRandom;
 
 public class SecondaryController {
     @FXML
@@ -27,13 +25,11 @@ public class SecondaryController {
     @FXML
     private TextField weightRangeInfoTextField;
     @FXML
-    private ComboBox shortestPathComboBox;
+    private ComboBox<String> shortestPathComboBox;
     @FXML
-    private ComboBox cohesionComboBox;
+    private ComboBox<String> cohesionComboBox;
     @FXML
     private TextField pathWeight;
-    @FXML
-    private Canvas canvas;
     @FXML
     private TextField nodeFrom;
     @FXML
@@ -58,7 +54,7 @@ public class SecondaryController {
     double nodeSeparator;
     double HUE_MAX = 0;
     double HUE_MIN = 250;
-    Circle[] circArray;
+    Circle[] circleArray;
     ShortestPathSolution shortestPathSolution;
     public void initialize() {
         drawGridGraph(paneGraph.getPrefWidth(), paneGraph.getPrefHeight());
@@ -92,16 +88,16 @@ public class SecondaryController {
         nodeTo.setText(null);
         drawGridGraph(paneGraph.getPrefWidth(), paneGraph.getPrefHeight());
     }
-    public void saveButtonAction() throws IOException {
+    public void saveButtonAction() {
         saveFileChooser.setTitle("Save graph");
         saveFileChooser.setInitialFileName("mygraph");
         saveFileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("text file", "*.txt"));
         try {
             File file = saveFileChooser.showSaveDialog(null);
             graph.saveGraph(file.getAbsolutePath());
-            System.out.println("Zapisano");
+            System.out.println("Saved!");
         } catch(Exception e) {
-            System.out.println("Nie zapisano");;
+            System.out.println("There was a problem with saving file!");
         }
     }
 
@@ -122,11 +118,11 @@ public class SecondaryController {
 
         Optional<ButtonType> option = alert.showAndWait();
 
-        if(option.get() == okButton){
+        if( option.isPresent() && option.get() == okButton){
             saveButtonAction();
             switchToPrimary();
         }
-        else if(option.get() == cancelButton){
+        else if(option.isPresent() && option.get() == cancelButton){
             switchToPrimary();
         }
         else {
@@ -137,14 +133,13 @@ public class SecondaryController {
     EventHandler<MouseEvent> onMouseClickedEventHandler = event -> {
         if (event.getSource() instanceof Circle) {
             Circle circle = (Circle) (event.getSource());
-            System.out.println(circle.getId());
             if(nodeFrom.getText() != null && nodeTo.getText() != null) {
                 nodeTo.setText(null);
             }
             if(nodeFrom.getText() == null) {
                 nodeFrom.setText(circle.getId());
                 colorNodesByDistance();
-                circArray[(Integer.parseInt(circle.getId()))].setFill(Color.LIGHTGREY);
+                circleArray[(Integer.parseInt(circle.getId()))].setFill(Color.LIGHTGREY);
             }
             else if(nodeTo.getText() == null) {
                 nodeTo.setText(circle.getId());
@@ -153,7 +148,7 @@ public class SecondaryController {
         }
     };
     public void colorNodesByDistance() {
-        String shortestPathAlg = (String) shortestPathComboBox.getValue();
+        String shortestPathAlg = shortestPathComboBox.getValue();
         if( shortestPathAlg.equals("dijkstra")) {
             shortestPathSolution=GraphUtils.dijkstra(graph, Integer.parseInt(nodeFrom.getText()));
             time.setText("Choose the target node!");
@@ -171,7 +166,7 @@ public class SecondaryController {
             double min = stat.getMin();
             double max = stat.getMax();
             double hue = HUE_MIN + (HUE_MAX-HUE_MIN) * (shortestPathSolution.getWeightSolution(i)-min) / (max - min);
-            circArray[i].setFill(Color.hsb(hue, 1.0, 1.0 ));
+            circleArray[i].setFill(Color.hsb(hue, 1.0, 1.0 ));
         }
     }
     @FXML
@@ -193,20 +188,19 @@ public class SecondaryController {
         int nodeNum;
         double nodeX=0;
         double nodeY=0;
+        double min = Math.min(heightCanvas / rowNum, widthCanvas / colNum);
         if(rowNum<100 && colNum<100)
             nodeSize = (heightCanvas/rowNum > widthCanvas/colNum) ? widthCanvas/(colNum+RATIO_EDGE_NODE_SIZE*colNum) : heightCanvas/(rowNum+RATIO_EDGE_NODE_SIZE*colNum);
         else
-            nodeSize = (heightCanvas/rowNum > widthCanvas/colNum) ? widthCanvas/(colNum) : heightCanvas/(rowNum);
+            nodeSize = min;
 
-        double rightSeparator = nodeSize;
-        double bottomSeparator = nodeSize;
-        nodeSeparator = Math.min(heightCanvas / rowNum, widthCanvas / colNum);
+        nodeSeparator = min;
 
         //Draw edges
         nodeNum=0;
         for(int i=0; i<rowNum; i++) {
             for(int j=0; j<colNum; j++) {
-                LinkedList<Edge> nodeEdges = new LinkedList<Edge>(graph.getConnectionList(nodeNum));
+                LinkedList<Edge> nodeEdges = new LinkedList<>(graph.getConnectionList(nodeNum));
                 double nodeA_X = j * nodeSeparator;
                 double nodeA_Y = i * nodeSeparator;
                 for (Edge edge : nodeEdges) {
@@ -238,7 +232,7 @@ public class SecondaryController {
             }
         }
 
-        circArray = new Circle[nodesNumbers];
+        circleArray = new Circle[nodesNumbers];
         nodeNum=0;
         // Draw nodes
         for(int i=0; i<graph.getRowsNum(); i++) {
@@ -252,17 +246,17 @@ public class SecondaryController {
                 else {
                     nodeX += nodeSeparator;
                 }
-                circArray[nodeNum] = new Circle(nodeX+nodeSize/2, nodeY+nodeSize/2, nodeSize/2, Color.BLUE);
-                circArray[nodeNum].setId(String.valueOf(nodeNum));
-                circArray[nodeNum].setOnMouseClicked(onMouseClickedEventHandler);
+                circleArray[nodeNum] = new Circle(nodeX+nodeSize/2, nodeY+nodeSize/2, nodeSize/2, Color.BLUE);
+                circleArray[nodeNum].setId(String.valueOf(nodeNum));
+                circleArray[nodeNum].setOnMouseClicked(onMouseClickedEventHandler);
                 nodeNum++;
             }
             nodeY += nodeSeparator;
         }
-        paneGraph.getChildren().addAll(circArray);
+        paneGraph.getChildren().addAll(circleArray);
     }
     public void drawShortestPath() {
-        String shortestPathAlg = (String) shortestPathComboBox.getValue();
+        String shortestPathAlg = shortestPathComboBox.getValue();
 
         if( shortestPathAlg.equals("dijkstra")) {
             shortestPathSolution=GraphUtils.dijkstra(graph,Integer.parseInt(nodeFrom.getText()));
@@ -277,8 +271,6 @@ public class SecondaryController {
         ArrayList<Integer> path=new ArrayList<>(shortestPathSolution.getPathSolution(Integer.parseInt(nodeTo.getText())));
 
         int colNum = graph.getColNum();
-        int rowNum = graph.getRowsNum();
-        //int hue = ThreadLocalRandom.current().nextInt(1, 360);
         for(int i=1; i<path.size(); i++) {
             int rowNodeA = (int) Math.floor(path.get(i-1) / colNum);
             int colNodeA = path.get(i-1) % colNum;
@@ -291,12 +283,10 @@ public class SecondaryController {
 
             Line line = new Line(nodeA_X, nodeA_Y, nodeB_X, nodeB_Y);
             line.setStrokeWidth((RATIO_EDGE_NODE_WIDTH+0.2)*nodeSize);
-//            line.setStroke(Color.hsb(hue, 1.0, 1.0));
             line.setStroke(Color.WHITE);
             paneGraph.getChildren().add(line);
         }
 
-//        shortestPathSolution.displayPath();
         pathWeight.setText(String.valueOf(Math.round(shortestPathSolution.getWeightSolution(Integer.parseInt(nodeTo.getText())) * 10000.0) / 10000.0));
     }
 
