@@ -156,15 +156,15 @@ public class SecondaryController {
         String shortestPathAlg = (String) shortestPathComboBox.getValue();
         if( shortestPathAlg.equals("dijkstra")) {
             shortestPathSolution=GraphUtils.dijkstra(graph, Integer.parseInt(nodeFrom.getText()));
-            time.setText("Choose the node to draw path!");
+            time.setText("Choose the target node!");
         }
         else if( shortestPathAlg.equals("bellman-ford")) {
             shortestPathSolution=GraphUtils.bellmanFord(graph,Integer.parseInt(nodeFrom.getText()));
-            time.setText("Choose the node to draw path!");
+            time.setText("Choose the target node!");
         }
         else {
             shortestPathSolution=GraphUtils.floydWarshall(graph,Integer.parseInt(nodeFrom.getText()));
-            time.setText("Choose the node to draw path!");
+            time.setText("Choose the target node!");
         }
         for(int i=0; i<graph.getRowsNum()*graph.getColNum(); i++) {
             DoubleSummaryStatistics stat = Arrays.stream(shortestPathSolution.weightArray).summaryStatistics();
