@@ -190,6 +190,7 @@ public class SecondaryController {
         double nodeY=0;
         double min = Math.min(heightCanvas / rowNum, widthCanvas / colNum);
         if(rowNum<100 && colNum<100)
+           // nodeSize = (heightCanvas/rowNum > widthCanvas/colNum) ? widthCanvas/(colNum+RATIO_EDGE_NODE_SIZE*colNum) : heightCanvas/(rowNum+RATIO_EDGE_NODE_SIZE*colNum);
             nodeSize = (heightCanvas/rowNum > widthCanvas/colNum) ? widthCanvas/(colNum+RATIO_EDGE_NODE_SIZE*colNum) : heightCanvas/(rowNum+RATIO_EDGE_NODE_SIZE*colNum);
         else
             nodeSize = min;
