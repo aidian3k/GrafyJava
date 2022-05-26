@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="TOP_CENTER" prefHeight="850.0" prefWidth="795.0" spacing="20.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.grafy.SecondaryController">
+<VBox alignment="TOP_CENTER" prefHeight="850.0" prefWidth="795.0" spacing="20.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.grafy.SecondaryController">
     <children>
       <Pane prefHeight="101.0" prefWidth="760.0">
          <children>
@@ -39,7 +39,7 @@
             </Label>
          </children>
       </Pane>
-      <Pane fx:id="paneGraph" prefHeight="446.0" prefWidth="755.0" />
+      <Pane fx:id="paneGraph" prefHeight="460.0" prefWidth="755.0" />
       <Pane prefHeight="27.0" prefWidth="789.0">
          <children>
             <ImageView fx:id="colorScaleImg" fitHeight="15.0" fitWidth="800.0" layoutX="-21.0" layoutY="19.0" pickOnBounds="true" preserveRatio="true" />

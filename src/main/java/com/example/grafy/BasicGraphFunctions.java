@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-public class BasicGraphFunctions {
+public class BasicGraphFunctions implements GraphFunctions {
 
     protected ArrayList<List<Edge>> graph=new ArrayList<>();
     protected int colNum; //Initialized 0
@@ -13,7 +13,7 @@ public class BasicGraphFunctions {
     protected double minWeight;
     protected double maxWeight;
 
-    void addEdgeToList(int index, Edge e){
+    public void addEdgeToList(int index, Edge e){
 
         try {
             graph.get(index).add(e);
@@ -24,7 +24,7 @@ public class BasicGraphFunctions {
 
     }
 
-    void saveGraph (String path) throws IOException {
+    public void saveGraph (String path) throws IOException {
         PrintWriter pw=new PrintWriter(new FileWriter(path));
 
         if(graph==null){
@@ -43,7 +43,7 @@ public class BasicGraphFunctions {
         pw.close();
     }
 
-    void readGraph(String path) throws IOException {
+    public void readGraph(String path) throws IOException {
         BufferedReader br=new BufferedReader(new FileReader(path));
         try{
             String [] words=br.readLine().split("\s");
@@ -91,7 +91,8 @@ public class BasicGraphFunctions {
 
         br.close();
     }
-    LinkedList<Edge> getConnectionList(int node){
+    public LinkedList<Edge> getConnectionList(int node){
         return ((LinkedList<Edge>)graph.get(node))==null ? null : (LinkedList<Edge>)graph.get(node);
     }
+
 }

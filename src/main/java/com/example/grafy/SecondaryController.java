@@ -55,7 +55,12 @@ public class SecondaryController {
     double HUE_MAX = 0;
     double HUE_MIN = 250;
     Circle[] circleArray;
+
     ShortestPathSolution shortestPathSolution;
+    private final ShortestPath pathAlgorithms = new PathAlgorithms();
+
+    private final Cohesion cohesionAlgorithms = new CohesionAlgorithms();
+
     public void initialize() {
         drawGridGraph(paneGraph.getPrefWidth(), paneGraph.getPrefHeight());
         colorScaleImg.setImage(createColorScaleImage((int) colorScaleImg.getFitWidth(), (int) colorScaleImg.getFitHeight()));
@@ -75,10 +80,10 @@ public class SecondaryController {
     }
     public void cohesionComboBoxAction() {
         if(cohesionComboBox.getValue().equals("bfs")) {
-            cohesionInfoLabel.setText(GraphUtils.breathFirstSearch(graph, 0) ? "Is cohesion! [bfs]" : "Not cohesion:( [bfs]");
+            cohesionInfoLabel.setText(cohesionAlgorithms.breathFirstSearch(graph, 0) ? "Is cohesion! [bfs]" : "Not cohesion:( [bfs]");
         }
         else if(cohesionComboBox.getValue().equals("dfs"))
-            cohesionInfoLabel.setText(GraphUtils.depthFirstSearch(graph, 0) ? "Is cohesion! [dfs]" : "Not cohesion:( [dfs]");
+            cohesionInfoLabel.setText(cohesionAlgorithms.depthFirstSearch(graph, 0) ? "Is cohesion! [dfs]" : "Not cohesion:( [dfs]");
         else
             cohesionInfoLabel.setText("");
     }
@@ -150,15 +155,15 @@ public class SecondaryController {
     public void colorNodesByDistance() {
         String shortestPathAlg = shortestPathComboBox.getValue();
         if( shortestPathAlg.equals("dijkstra")) {
-            shortestPathSolution=GraphUtils.dijkstra(graph, Integer.parseInt(nodeFrom.getText()));
+            shortestPathSolution= pathAlgorithms.dijkstra(graph, Integer.parseInt(nodeFrom.getText()));
             time.setText("Choose the target node!");
         }
         else if( shortestPathAlg.equals("bellman-ford")) {
-            shortestPathSolution=GraphUtils.bellmanFord(graph,Integer.parseInt(nodeFrom.getText()));
+            shortestPathSolution= pathAlgorithms.bellmanFord(graph,Integer.parseInt(nodeFrom.getText()));
             time.setText("Choose the target node!");
         }
         else {
-            shortestPathSolution=GraphUtils.floydWarshall(graph,Integer.parseInt(nodeFrom.getText()));
+            shortestPathSolution= pathAlgorithms.floydWarshall(graph,Integer.parseInt(nodeFrom.getText()));
             time.setText("Choose the target node!");
         }
         for(int i=0; i<graph.getRowsNum()*graph.getColNum(); i++) {
@@ -260,13 +265,13 @@ public class SecondaryController {
         String shortestPathAlg = shortestPathComboBox.getValue();
 
         if( shortestPathAlg.equals("dijkstra")) {
-            shortestPathSolution=GraphUtils.dijkstra(graph,Integer.parseInt(nodeFrom.getText()));
+            shortestPathSolution= pathAlgorithms.dijkstra(graph,Integer.parseInt(nodeFrom.getText()));
         }
         else if( shortestPathAlg.equals("bellman-ford")) {
-            shortestPathSolution=GraphUtils.bellmanFord(graph,Integer.parseInt(nodeFrom.getText()));
+            shortestPathSolution= pathAlgorithms.bellmanFord(graph,Integer.parseInt(nodeFrom.getText()));
         }
         else {
-            shortestPathSolution=GraphUtils.floydWarshall(graph,Integer.parseInt(nodeFrom.getText()));
+            shortestPathSolution= pathAlgorithms.floydWarshall(graph,Integer.parseInt(nodeFrom.getText()));
         }
 
         ArrayList<Integer> path=new ArrayList<>(shortestPathSolution.getPathSolution(Integer.parseInt(nodeTo.getText())));
@@ -306,6 +311,7 @@ public class SecondaryController {
         return image;
     }
 }
+
 
 
 
