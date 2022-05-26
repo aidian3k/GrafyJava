@@ -4,6 +4,7 @@ import java.util.LinkedList;
 import java.util.Stack;
 
 public class CohesionAlgorithms implements Cohesion{
+    @Override
     public boolean breathFirstSearch(GridGraph g, int node){
 
         if(g==null || node>=g.getNodesNum()){
@@ -36,7 +37,7 @@ public class CohesionAlgorithms implements Cohesion{
 
         return true;
     }
-
+    @Override
     public boolean depthFirstSearch(GridGraph g, int node){
 
         if(g==null || node>=g.getNodesNum()){

@@ -13,6 +13,7 @@ public class BasicGraphFunctions implements GraphFunctions {
     protected double minWeight;
     protected double maxWeight;
 
+    @Override
     public void addEdgeToList(int index, Edge e){
 
         try {
@@ -24,6 +25,7 @@ public class BasicGraphFunctions implements GraphFunctions {
 
     }
 
+    @Override
     public void saveGraph (String path) throws IOException {
         PrintWriter pw=new PrintWriter(new FileWriter(path));
 
@@ -43,6 +45,7 @@ public class BasicGraphFunctions implements GraphFunctions {
         pw.close();
     }
 
+    @Override
     public void readGraph(String path) throws IOException {
         BufferedReader br=new BufferedReader(new FileReader(path));
         try{
@@ -91,6 +94,8 @@ public class BasicGraphFunctions implements GraphFunctions {
 
         br.close();
     }
+
+    @Override
     public LinkedList<Edge> getConnectionList(int node){
         return ((LinkedList<Edge>)graph.get(node))==null ? null : (LinkedList<Edge>)graph.get(node);
     }

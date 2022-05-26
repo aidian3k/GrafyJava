@@ -7,6 +7,7 @@ public class PathAlgorithms implements ShortestPath{
 
     CohesionAlgorithms isCoherent = new CohesionAlgorithms(); // Used composition
 
+    @Override
     public ShortestPathSolution dijkstra(GridGraph g, int nodeA){
 
         if(g==null || nodeA>=g.getNodesNum() || !isCoherent.breathFirstSearch(g,nodeA)){
@@ -46,6 +47,7 @@ public class PathAlgorithms implements ShortestPath{
         return new ShortestPathSolution(nodeA, prev, distance);
     }
 
+    @Override
     public ShortestPathSolution bellmanFord(GridGraph g, int nodeA){
 
         if(g==null || nodeA>=g.getNodesNum() || !isCoherent.breathFirstSearch(g,nodeA)){
@@ -92,6 +94,7 @@ public class PathAlgorithms implements ShortestPath{
         return new ShortestPathSolution(nodeA, prev, distance); //Time complexity of the algorithm is O(n^3), the advantage of that algorithm is that it accepts negative weights
     }
 
+    @Override
     public ShortestPathSolution floydWarshall(GridGraph g, int nodeA){
 
         if(g==null || nodeA>=g.getNodesNum() || !isCoherent.breathFirstSearch(g,nodeA)){
