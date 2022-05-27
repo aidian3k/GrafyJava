@@ -78,41 +78,6 @@ public class SecondaryController {
         cohesionComboBox.getItems().add("bfs");
         cohesionComboBox.getItems().add("dfs");
     }
-
-    public boolean checkIfGrid(GridGraph readGraph){
-
-        if(readGraph == null){
-            throw new IllegalArgumentException("Given readGraph is null!");
-        }
-
-        int readRows = readGraph.rowsNum;
-        int readColumn = readGraph.colNum;
-        GridGraph goodGraph = new GridGraph(readRows,readColumn,0,1);
-
-        for(int i = 0 ; i < goodGraph.getNodesNum() ; i++ ){
-
-            int sum = 0;
-            LinkedList<Edge> goodList = goodGraph.getConnectionList(i);
-            LinkedList<Edge> readList = readGraph.getConnectionList(i);
-
-            if(goodList.size()!=readList.size()){
-                return false;
-            }
-
-            for(int j = 0 ; j < goodList.size() ; ++j){
-                int goodNodeTo = goodList.get(j).getNodeTo();
-                int readNodeTo = readList.get(j).getNodeTo();
-                sum+=goodNodeTo-readNodeTo;
-            }
-
-            if(sum!=0){
-                return false;
-            }
-
-        }
-        return true;
-    }
-
     public void cohesionComboBoxAction() {
         if(cohesionComboBox.getValue().equals("bfs")) {
             cohesionInfoLabel.setText(cohesionAlgorithms.breathFirstSearch(graph, 0) ? "Is cohesion! [bfs]" : "Not cohesion:( [bfs]");
