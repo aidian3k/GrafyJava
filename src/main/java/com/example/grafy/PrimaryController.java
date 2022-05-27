@@ -1,19 +1,14 @@
 package com.example.grafy;
 
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.input.MouseEvent;
 import javafx.stage.FileChooser;
-import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
+import java.util.LinkedList;
 
 public class PrimaryController {
     @FXML
@@ -46,6 +41,7 @@ public class PrimaryController {
             else {
                 GridGraph graph = new GridGraph(rowNum, colNum, minWeight, maxWeight);
                 GraphHolder holder = GraphHolder.getInstance();
+
                 holder.setGraph(graph);
                 switchToSecondary();
             }
@@ -57,16 +53,56 @@ public class PrimaryController {
     private void generateFromFileButtonAction() throws IOException {
         try {
             GridGraph graph = new GridGraph(fileNameTextField.getText());
-            GraphHolder holder = GraphHolder.getInstance();
-            holder.setGraph(graph);
 
-            switchToSecondary();
+            if(!checkIfGrid(graph)) {
+                warningLabel.setText("Graph in file is not a grid :(");
+            }
+            else {
+                GraphHolder holder = GraphHolder.getInstance();
+                holder.setGraph(graph);
+//                System.out.println(graph.getConnectionList(0).get(0).getNodeTo());System.out.println("dsg1");
+                switchToSecondary();
+            }
         } catch(FileNotFoundException e) {
             warningLabel.setText("File was not found!");
         } catch(IOException e) {
             warningLabel.setText("There is a problem with reading given graph, check the file with graph!");
         }
     }
+    public boolean checkIfGrid(GridGraph readGraph){
+
+        if(readGraph == null){
+            throw new IllegalArgumentException("Given readGraph is null!");
+        }
+
+        int readRows = readGraph.rowsNum;
+        int readColumn = readGraph.colNum;
+        GridGraph goodGraph = new GridGraph(readRows,readColumn,0,1);
+
+        for(int i = 0 ; i < goodGraph.getNodesNum() ; i++ ){
+
+            int sum = 0;
+            LinkedList<Edge> goodList = goodGraph.getConnectionList(i);
+            LinkedList<Edge> readList = readGraph.getConnectionList(i);
+
+            if(goodList.size()!=readList.size()){
+                return false;
+            }
+
+            for(int j = 0 ; j < goodList.size() ; ++j){
+                int goodNodeTo = goodList.get(j).getNodeTo();
+                int readNodeTo = readList.get(j).getNodeTo();
+                sum+=goodNodeTo-readNodeTo;
+            }
+
+            if(sum!=0){
+                return false;
+            }
+
+        }
+        return true;
+    }
+
     @FXML
     private void switchToSecondary() throws IOException {
         App.setRoot("secondary");

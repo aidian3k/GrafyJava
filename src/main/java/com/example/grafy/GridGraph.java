@@ -120,14 +120,13 @@ public class GridGraph extends BasicGraphFunctions {
     public int getColNum(){
         return this.colNum;
     }
-
     public int getRowsNum(){
         return this.rowsNum;
     }
-
     public int getNodesNum(){
         return colNum*rowsNum;
     }
     public double getMinWeight() { return minWeight; }
     public double getMaxWeight() { return maxWeight; }
+
 }

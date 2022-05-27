@@ -18,4 +18,5 @@ public final class GraphHolder {
     public GridGraph getGraph() {
         return this.graph;
     }
+
 }
