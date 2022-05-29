@@ -60,13 +60,12 @@ public class PrimaryController {
             else {
                 GraphHolder holder = GraphHolder.getInstance();
                 holder.setGraph(graph);
-//                System.out.println(graph.getConnectionList(0).get(0).getNodeTo());System.out.println("dsg1");
                 switchToSecondary();
             }
         } catch(FileNotFoundException e) {
             warningLabel.setText("File was not found!");
-        } catch(IOException e) {
-            warningLabel.setText("There is a problem with reading given graph, check the file with graph!");
+        } catch(IOException | RuntimeException e) {
+            warningLabel.setText("There is a problem with reading given graph, check the file with the graph!");
         }
     }
     public boolean checkIfGrid(GridGraph readGraph){
